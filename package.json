@@ -1,0 +1,38 @@
+{
+  "name": "market",
+  "version": "1.0.0",
+  "description": "师大微易",
+  "main": "index.js",
+  "scripts": {
+    "dev": "cross-env NODE_ENV=development nodemon --watch 'src/**/*.ts' --ignore 'src/**/*.spec.ts' --exec 'ts-node' app.ts",
+    "build": "cross-env NODE_ENV=production ./node_modules/.bin/ts-node app.ts --watch"
+  },
+  "author": "Ghan",
+  "license": "ISC",
+  "dependencies": {
+    "cross-env": "^6.0.3",
+    "dayjs": "^1.8.19",
+    "invariant": "^2.2.4",
+    "koa": "^2.11.0",
+    "koa-bodyparser": "^4.2.1",
+    "koa-cors": "^0.0.16",
+    "koa-router": "^7.4.0",
+    "moment": "^2.24.0",
+    "mysql2": "^2.1.0",
+    "node-fetch": "^2.6.0",
+    "sequelize": "^5.21.3",
+    "ts-node": "^8.5.4"
+  },
+  "devDependencies": {
+    "typescript": "^3.7.4",
+    "@types/invariant": "^2.2.31",
+    "@types/koa": "^2.11.0",
+    "@types/koa-bodyparser": "^4.3.0",
+    "@types/koa-cors": "^0.0.0",
+    "@types/koa-router": "^7.0.42",
+    "@types/node": "^13.1.4",
+    "@types/node-fetch": "^2.5.4",
+    "cz-conventional-changelog": "^3.0.2",
+    "nodemon": "^2.0.2"
+  }
+}
