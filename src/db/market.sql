@@ -45,7 +45,9 @@ CREATE TABLE `sys_user`  (
 -- ----------------------------
 DROP TABLE IF EXISTS `user_inf`;
 CREATE TABLE `user_inf`  (
-  `id` int(11) NOT NULL COMMENT '主键',
+  `user_id` int(11) UNSIGNED NOT NULL AUTO_INCREMENT COMMENT '主键',
+  `phone` varchar(11) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT '' COMMENT '手机号码',
+  `password` varchar(50) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT '' COMMENT '密码',
   `name` varchar(30) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '姓名',
   `avatar` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '头像路径',
   `sex` tinyint(1) NULL DEFAULT NULL COMMENT '性别0-女，1-男',
@@ -54,7 +56,7 @@ CREATE TABLE `user_inf`  (
   `school` varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '学校名称',
   `create_time` datetime(0) NULL DEFAULT NULL COMMENT '创建时间',
   `update_time` datetime(0) NULL DEFAULT NULL COMMENT '修改时间',
-  PRIMARY KEY (`id`) USING BTREE
+  PRIMARY KEY (`user_id`) USING BTREE
 ) ENGINE = InnoDB CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci COMMENT = '用户表' ROW_FORMAT = Dynamic;
 
 -- ----------------------------
@@ -77,7 +79,7 @@ CREATE TABLE `market_collect`  (
 DROP TABLE IF EXISTS `market_item`;
 CREATE TABLE `market_item`  (
   `id` int(11) UNSIGNED NOT NULL AUTO_INCREMENT COMMENT '自增主键',
-  `seller` int(11) NOT NULL COMMENT '卖家编号',
+  `user_id` int(11) NOT NULL COMMENT '卖家编号',
   `viewing_count` int(11) NOT NULL DEFAULT 0 COMMENT '浏览数',
   `title` varchar(200) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '标题',
   `description` text CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL COMMENT '商品描述',

@@ -2,8 +2,10 @@ import { Model, DataTypes } from 'sequelize';
 import sequelize from './index';
 
 class UserModel extends Model {
-  public id!: number;
+  public user_id!: number;
   public name!: string;
+  public phone!: string;
+  public password!: string;
   public avatar!: string;
   public sex!: number;
   public birthday!: string;
@@ -14,11 +16,13 @@ class UserModel extends Model {
 }
 
 UserModel.init({
-  id: {
+  user_id: {
     type: DataTypes.INTEGER.UNSIGNED,
     primaryKey: true,
     autoIncrement: true
   },
+  password: { type: DataTypes.STRING },
+  phone: { type: DataTypes.STRING },
   name: { type: DataTypes.STRING },
   avatar: { type: DataTypes.STRING },
   sex: { type: DataTypes.INTEGER },
@@ -31,6 +35,11 @@ UserModel.init({
   sequelize,
   freezeTableName: true,
   modelName: 'user_inf',
+  defaultScope: {
+    attributes: {
+      exclude: ['password']
+    }
+  }
 });
 
 export default UserModel;

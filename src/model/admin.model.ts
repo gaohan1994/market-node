@@ -41,6 +41,11 @@ AdminModel.init({
   sequelize,
   freezeTableName: true,
   modelName: 'sys_user',
+  defaultScope: {
+    attributes: {
+      exclude: ['password']
+    }
+  }
 });
 
 export default AdminModel;

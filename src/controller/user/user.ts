@@ -1,52 +1,50 @@
 import Koa from 'koa';
-import { AdminModel } from '../../model';
+import { UserModel } from '../../model';
 import { responseCode } from '../config';
 import invariant from 'invariant';
 import util from '../../util/util';
 import dayJs from 'dayjs';
 
-class AdminController {
+class UserController {
 
-  public adminAdd = async (ctx: Koa.Context) => {
+  public userAdd = async (ctx: Koa.Context) => {
     try {
       const { 
-        login_name,
-        user_name,
+        name,
+        avatar,
         phone,
+        sex,
         password,
-        email,
-        sex,
-        avatar,
-        status,
-        remark,
+        birthday,
+        intro,
+        school,
       } = ctx.request.body;
-  
-      invariant(!!login_name, 'login_name不能为空');
-      invariant(!!phone, 'phone不能为空');
-      invariant(!!password, 'password不能为空');
       
-      const admin = await AdminModel.findOne({ where: { login_name }, raw: true });
-      invariant(!admin, '管理员已存在!');
+      invariant(!!phone, '姓名不能为空');
+      invariant(!!password, '密码不能为空');
       
-      const newAdmin = {
-        login_name,
-        user_name: user_name || login_name,
-        phone,
-        password: util.md5(password),
-        email,
-        sex,
+      const user = await UserModel.findOne({ where: { phone }, raw: true });
+      invariant(!user, '该用户已存在!');
+      
+      const newUser = {
+        name,
         avatar,
-        status,
-        remark,
-        create_time: dayJs().format('YYYY-MM-DD HH:mm:ss'),
+        phone,
+        sex,
+        password: util.md5(password),
+        birthday,
+        intro,
+        school,
+        create_time: dayJs().format('YYYY-MM-DD HH:mm:ss')
       };
 
-      const result = await AdminModel.create(newAdmin);
+      const result = await UserModel.create(newUser);
+
       invariant(!!result.user_id, '创建失败');
       ctx.response.body = {
         code: responseCode.success,
         data: result,
-        msg: '管理员注册成功!'
+        msg: '注册成功!'
       };
     } catch (error) {
       ctx.response.body = {
@@ -56,24 +54,16 @@ class AdminController {
     }
   }
 
-  public adminList = async (ctx: Koa.Context) => {
-    try {
-      const result = await AdminModel.findAll({raw: true, attributes: {exclude: ['password']}});
+  public userDetail = async (ctx: Koa.Context) => { 
+    try { 
+      const { user_id } = ctx.request.body;
+      invariant(!!user_id, '请传入用户ID');
+
+      const user = await UserModel.findOne({where: {user_id}, raw: true});
       ctx.response.body = {
         code: responseCode.success,
-        data: result,
+        data: user
       };
-    } catch (error) {
-      ctx.response.body = {
-        code: responseCode.error,
-        msg: error.message
-      };
-    }
-  }
-
-  public adminDetail = async (ctx: Koa.Context) => {
-    try {
-      console.log('session: ', ctx.session);
     } catch (error) {
       ctx.response.body = {
         code: responseCode.error,
@@ -83,4 +73,4 @@ class AdminController {
   }
 }
 
-export default new AdminController();
+export default new UserController();

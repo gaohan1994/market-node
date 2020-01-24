@@ -22,3 +22,4 @@ export default sequelize;
 
 export { default as ProductModel } from './product.model';
 export { default as AdminModel } from './admin.model';
+export { default as UserModel } from './user.medel';
