@@ -3,7 +3,7 @@ import sequelize from './index';
 
 class ProductModel extends Model {
   public id!: number;
-  public seller!: number;
+  public user_id!: number;
   public viewing_count!: number;
   public trans_type!: number;
   public type!: number;
@@ -13,8 +13,6 @@ class ProductModel extends Model {
   public status!: number;
   public description!: string;
   public title!: string;
-  public pic!: string;
-  public unique_id!: string;
   public create_time!: string;
   public update_time!: string;
   public pics!: string[];
@@ -26,7 +24,7 @@ ProductModel.init({
     primaryKey: true,
     autoIncrement: true
   },
-  seller: { type: DataTypes.INTEGER },
+  user_id: { type: DataTypes.INTEGER },
   viewing_count: { type: DataTypes.INTEGER },
   trans_type: { type: DataTypes.INTEGER },
   type: { type: DataTypes.INTEGER },
@@ -36,8 +34,6 @@ ProductModel.init({
   status: { type: DataTypes.INTEGER },
   description: { type: DataTypes.STRING },
   title: { type: DataTypes.STRING },
-  pic: { type: DataTypes.STRING },
-  unique_id: { type: DataTypes.STRING },
   create_time: { type: DataTypes.STRING },
   update_time: { type: DataTypes.STRING },
   pics: { type: new DataTypes.ARRAY(DataTypes.STRING) }

@@ -1,6 +1,6 @@
 import Koa from 'koa';
 import Router from 'koa-router';
-import { ProductController, AdminController, UserController } from "../controller";
+import { ProductController, AdminController, UserController, TypeController } from "../controller";
 
 const router = new Router();
 
@@ -9,6 +9,14 @@ const router = new Router();
  */
 router.get('/product/list', ProductController.productList as any);
 router.post('/product/add', ProductController.productAdd as any);
+
+/**
+ * @todo [商品分类模块]
+ */
+router.get('/type/list', TypeController.typeList as any);
+router.post('/type/add', TypeController.typeAdd as any);
+router.post('/type/update', TypeController.typeUpdate as any);
+router.post('/type/delete', TypeController.typeDelete as any);
 
 /**
  * @todo [管理员模块]

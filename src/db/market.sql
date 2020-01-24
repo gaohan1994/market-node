@@ -73,6 +73,20 @@ CREATE TABLE `market_collect`  (
   PRIMARY KEY (`id`) USING BTREE
 ) ENGINE = InnoDB AUTO_INCREMENT = 1 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci COMMENT = '用户收藏表' ROW_FORMAT = Dynamic;
 
+
+-- ----------------------------
+-- Table structure for cceos_product_type
+-- ----------------------------
+DROP TABLE IF EXISTS `market_type`;
+CREATE TABLE `market_type`  (
+  `id` int(11) UNSIGNED NOT NULL AUTO_INCREMENT COMMENT '商品分类ID',
+  `name` varchar(20) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL DEFAULT '' COMMENT '商品分类名称',
+  `picture` varchar(50) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT '' COMMENT '图片地址',
+  `create_time` datetime(0) NULL DEFAULT CURRENT_TIMESTAMP(0) COMMENT '创建时间',
+  `update_time` datetime(0) NULL DEFAULT NULL ON UPDATE CURRENT_TIMESTAMP(0) COMMENT '修改时间',
+  PRIMARY KEY (`id`) USING BTREE
+) ENGINE = InnoDB AUTO_INCREMENT = 109272001 CHARACTER SET = utf8 COLLATE = utf8_general_ci COMMENT = '商品分类信息表' ROW_FORMAT = Dynamic;
+
 -- ----------------------------
 -- Table structure for market_item
 -- ----------------------------
@@ -89,9 +103,7 @@ CREATE TABLE `market_item`  (
   `amount` bigint(20) NULL DEFAULT NULL COMMENT '价格',
   `exp_fee` bigint(20) NOT NULL DEFAULT 0 COMMENT '邮费',
   `status` tinyint(1) NOT NULL DEFAULT 1 COMMENT '状态（0：已删除，1：有效，2：已下架，3：已锁定，4：已售出，5：已收货）',
-  `pic` varchar(200) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '展示图片地址',
   `pics` varchar(200) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '图片文件夹地址',
-  `unique_id` varchar(16) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '唯一标识码',
   `create_time` datetime(0) NULL DEFAULT CURRENT_TIMESTAMP(0) COMMENT '创建时间',
   `update_time` datetime(0) NULL DEFAULT NULL COMMENT '修改时间',
   PRIMARY KEY (`id`) USING BTREE
