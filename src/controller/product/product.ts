@@ -86,6 +86,86 @@ class ProductController {
       };
     }
   }
+
+  /**
+   * @todo [删除商品信息]
+   *
+   * @memberof ProductController
+   */
+  public productDelete = async (ctx: Koa.Context) => {
+    try {
+      const { id } = ctx.request.body;
+      invariant(!!id, '请选择要删除的商品id');
+
+      const result: ProductModel = await ProductModel.findOne({where: {id}});
+      invariant(!!result, '没有找到要删除的商品');
+
+      await ProductModel.destroy({where: {id}});
+      ctx.response.body = {
+        code: responseCode.success,
+        msg: '删除成功'
+      };
+    } catch (error) {
+      ctx.response.body = {
+        code: responseCode.error,
+        msg: error.message
+      };
+    }
+  }
+
+  /**
+   * @todo [更改商品信息]
+   *
+   * @memberof ProductController
+   */
+  public productUpdate = async (ctx: Koa.Context) => {
+    try {
+      /**
+       * @todo [验证表单信息]
+       */
+      const { id, viewing_count, title, description, trans_type, type, is_free_shipping, amount, exp_fee, status, pics } = ctx.request.body;
+      invariant(!!id, '请选择要更新的商品');
+      invariant(!!title, '商品标题不能为空');
+      invariant(typeof trans_type === 'number', '商品交易方式不能为空');
+      invariant(typeof amount === 'number', '请设置商品价格');
+
+      /**
+       * @todo [商品是否修改分类]
+       */
+      
+    } catch (error) {
+      ctx.response.body = {
+        code: responseCode.error,
+        msg: error.message
+      };
+    }
+  }
+
+  /**
+   * @todo [商品详情]
+   *
+   * @memberof ProductController
+   */
+  public productDetail = async (ctx: Koa.Context) => {
+    try {
+      const { id } = ctx.request.query;
+      invariant(!!id, '请传入要查询的商品id');
+
+      const product = await ProductModel.findOne({where: {id}, raw: true});
+      invariant(!!product, '没有找到该商品详情');
+      ProductModel.update({viewing_count: product.viewing_count + 1}, {where: {id}});
+
+      ctx.response.body = {
+        code: responseCode.success,
+        data: product
+      };
+    } catch (error) {
+      ctx.response.body = {
+        code: responseCode.error,
+        msg: error.message
+      };
+    }
+  }
 }
 
 export default new ProductController();

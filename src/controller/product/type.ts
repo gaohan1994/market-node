@@ -97,6 +97,24 @@ class TypeController {
       };
     }
   }
+
+  public typeDetail = async (ctx: Koa.Context) => {
+    try {
+      const { id } = ctx.request.query;
+      invariant(!!id, '请传入要查询的分类id');
+      const type = await TypeModel.findOne({where: {id}, raw: true});
+      invariant(!!type, '没有找到该商品分类');
+      ctx.response.body = {
+        code: responseCode.success,
+        data: type,
+      };
+    } catch (error) {
+      ctx.response.body = {
+        code: responseCode.error,
+        msg: error.message
+      };
+    }
+  }
 }
 
 export default new TypeController();

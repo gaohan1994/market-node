@@ -1,5 +1,5 @@
 import { Model, DataTypes } from 'sequelize';
-import sequelize from './index';
+import sequelize, { MessageModel } from './index';
 
 class UserModel extends Model {
   public user_id!: number;
