@@ -8,6 +8,7 @@ import {
   FileController,
 } from "../controller";
 import multer from 'koa-multer';
+import Validator from '../middleware/validator';
 
 const upload = multer({ dest: "public/static" });
 
@@ -33,7 +34,12 @@ router.post('/type/delete', TypeController.typeDelete as any);
 /**
  * @todo [管理员模块]
  */
+router.post('/admin/login', AdminController.adminLogin as any);
+router.post('/admin/delete', AdminController.adminDelete as any);
+router.post('/admin/update', AdminController.adminUpdate as any);
+router.post('/admin/logout', AdminController.adminLogout as any);
 router.post('/admin/add', AdminController.adminAdd as any);
+router.post('/admin/detail', AdminController.adminDetail as any);
 router.get('/admin/list', AdminController.adminList as any);
 
 /**

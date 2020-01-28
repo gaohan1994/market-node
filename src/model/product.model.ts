@@ -1,5 +1,5 @@
 import { Model, DataTypes } from 'sequelize';
-import sequelize from './index';
+import sequelize, { UserModel } from './index';
 
 class ProductModel extends Model {
   public id!: number;
@@ -41,6 +41,12 @@ ProductModel.init({
   sequelize,
   freezeTableName: true,
   modelName: 'market_item',
+});
+
+ProductModel.belongsTo(UserModel, {
+  as: 'userinfo',
+  foreignKey: 'user_id',
+  targetKey: 'user_id',
 });
 
 export default ProductModel;

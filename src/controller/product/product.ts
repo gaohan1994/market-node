@@ -1,6 +1,6 @@
 import Koa from 'koa';
 import { ProductModel, UserModel, TypeModel } from '../../model';
-import { responseCode } from '../config';
+import { responseCode, CommonInterface } from '../config';
 import invariant from 'invariant';
 import dayJs from 'dayjs';
 
@@ -8,7 +8,41 @@ class ProductController {
   
   public productList = async (ctx: Koa.Context) => {
     try {
-      const result = await ProductModel.findAll(); 
+      const { offset = 0, limit = 20 } = ctx.request.query as CommonInterface.FetchField;
+      const result = await ProductModel.findAndCountAll({
+        offset: Number(offset),
+        limit: Number(limit),
+        include: [{
+          model: UserModel,
+          as: 'userinfo',
+          attributes: ['user_id', ['name', 'username'], 'avatar', 'sex']
+        }],
+      }); 
+      ctx.response.body = {
+        code: responseCode.success,
+        data: result
+      };
+    } catch (error) {
+      ctx.response.body = {
+        code: responseCode.error,
+        msg: error.message
+      };
+    }
+  }
+
+  /**
+   * @todo [获取推荐商品]
+   *
+   * @memberof ProductController
+   */
+  public productListRandom = async (ctx: Koa.Context) => {
+    try {
+      const result = await ProductModel.findAll({
+        order: [['viewing_count', 'DESC']],
+        offset: 0,
+        limit: 20,
+        raw: true
+      });
       ctx.response.body = {
         code: responseCode.success,
         data: result
@@ -43,7 +77,7 @@ class ProductController {
       invariant(!!user_id, '请先验证身份信息');
       invariant(!!title, '商品标题不能为空');
       invariant(typeof trans_type === 'number', '商品交易方式不能为空');
-      invariant(typeof amount === 'number', '请设置商品价格');
+      invariant(!!amount, '请设置商品价格');
 
       /**
        * @todo [第二步从数据库中查询用户信息是否存在]

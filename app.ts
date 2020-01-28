@@ -2,6 +2,7 @@ import Koa from 'koa';
 import bodyParser from 'koa-bodyparser';
 import cors from 'koa-cors';
 import session from 'koa-session';
+import koaStatic from 'koa-static';
 import router from './src/router';
 
 const app = new Koa();
@@ -47,7 +48,11 @@ app.use(bodyParser());
 /**
  * @todo [加入跨域处理]
  */
-app.use(cors());
+app.use(cors({
+  credentials: true
+}));
+
+app.use(koaStatic(__dirname + '/public/static'));
 
 /**
  * @todo [打印日志]

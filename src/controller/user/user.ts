@@ -122,7 +122,7 @@ class UserController {
       };
       await UserModel.update(newUser, {where: {user_id}});
       ctx.response.body = {
-        code: responseCode.error,
+        code: responseCode.success,
         msg: '修改成功'
       };
     } catch (error) { 
