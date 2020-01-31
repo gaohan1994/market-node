@@ -1,5 +1,5 @@
 import Koa from 'koa';
-import { ProductModel, UserModel, TypeModel } from '../../model';
+import { ProductModel, UserModel, TypeModel, CollectModel } from '../../model';
 import { responseCode, CommonInterface } from '../config';
 import invariant from 'invariant';
 import dayJs from 'dayjs';
@@ -12,6 +12,9 @@ class ProductController {
       const result = await ProductModel.findAndCountAll({
         offset: Number(offset),
         limit: Number(limit),
+        where: {
+          status: 1
+        },
         include: [{
           model: UserModel,
           as: 'userinfo',
@@ -39,6 +42,9 @@ class ProductController {
     try {
       const result = await ProductModel.findAll({
         order: [['viewing_count', 'DESC']],
+        where: {
+          status: 1,
+        },
         offset: 0,
         limit: 20,
         raw: true
@@ -134,7 +140,11 @@ class ProductController {
       const result: ProductModel = await ProductModel.findOne({where: {id}});
       invariant(!!result, '没有找到要删除的商品');
 
-      await ProductModel.destroy({where: {id}});
+      await ProductModel.update({
+        status: 0,
+      }, {
+        where: { id }
+      });
       ctx.response.body = {
         code: responseCode.success,
         msg: '删除成功'
@@ -185,7 +195,15 @@ class ProductController {
       const { id } = ctx.request.query;
       invariant(!!id, '请传入要查询的商品id');
 
-      const product = await ProductModel.findOne({where: {id}, raw: true});
+      const product = await ProductModel.findOne({
+        where: {id}, 
+        include: [{
+          model: UserModel,
+          as: 'userinfo',
+          attributes: ['user_id', ['name', 'username'], 'avatar', 'sex']
+        }],
+        raw: false
+      });
       invariant(!!product, '没有找到该商品详情');
       ProductModel.update({viewing_count: product.viewing_count + 1}, {where: {id}});
 

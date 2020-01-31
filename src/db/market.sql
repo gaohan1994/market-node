@@ -59,6 +59,59 @@ CREATE TABLE `user_inf`  (
   PRIMARY KEY (`user_id`) USING BTREE
 ) ENGINE = InnoDB CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci COMMENT = '用户表' ROW_FORMAT = Dynamic;
 
+
+-- ----------------------------
+-- Table structure for cceos_order
+-- ----------------------------
+DROP TABLE IF EXISTS `market_order`;
+CREATE TABLE `market_order`  (
+  `id` int(11) UNSIGNED NOT NULL AUTO_INCREMENT COMMENT '订单ID',
+  `order_no` varchar(20) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL COMMENT '订单号',
+  `product_id` int(11) UNSIGNED NULL DEFAULT NULL COMMENT '商品ID',
+  `product_name` varchar(200) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '商品名称',
+  `product_picture` varchar(200) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '商品图片',
+  `package_id` varchar(20) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '严选平台包裹号',
+  `amount` bigint(12) UNSIGNED NULL DEFAULT NULL COMMENT '小计',
+  `random_key` char(6) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '随机串',
+  `user_id` int(11) UNSIGNED NULL DEFAULT NULL COMMENT '用户ID',
+  `pay_amount` bigint(12) UNSIGNED NULL DEFAULT NULL COMMENT '订单金额',
+  `exp_fee` bigint(12) NULL DEFAULT NULL COMMENT '邮费',
+  `logistics_no` varchar(200) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '物流号',
+  `trans_time` datetime(0) NULL DEFAULT NULL COMMENT '付款时间',
+  `flag` tinyint(3) UNSIGNED NULL DEFAULT 0 COMMENT '对账标志（1:已对账；0:未对账）',
+  `status` tinyint(1) NULL DEFAULT 0 COMMENT '状态（0:未支付,1:已完成,2:已支付,3:关闭,4:退货,5:异常,6:拒绝取消订单）',
+  `pay_status` tinyint(1) NULL DEFAULT 0 COMMENT '支付状态（0：未支付，1：已支付）',
+  `reject_reason` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '拒绝取消订单理由',
+  `refund_no` varchar(20) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '退货订单号',
+  `notify_url` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '货架回调路径',
+  `seller_id` int(11) NULL DEFAULT NULL COMMENT '卖家编号',
+  `is_delete` tinyint(4) UNSIGNED NULL DEFAULT 0 COMMENT '是否删除（0:否，1:是）',
+  `create_time` datetime(0) NULL DEFAULT CURRENT_TIMESTAMP(0) COMMENT '创建时间',
+  `update_time` datetime(0) NULL DEFAULT NULL ON UPDATE CURRENT_TIMESTAMP(0) COMMENT '修改时间',
+  PRIMARY KEY (`id`) USING BTREE,
+  UNIQUE INDEX `uk_order_no`(`order_no`) USING BTREE,
+  INDEX `idx_random_key`(`random_key`) USING BTREE
+) ENGINE = InnoDB AUTO_INCREMENT = 3474 CHARACTER SET = utf8 COLLATE = utf8_general_ci COMMENT = '订单信息表' ROW_FORMAT = Dynamic;
+
+-- ----------------------------
+-- Table structure for cceos_order_item
+-- ----------------------------
+DROP TABLE IF EXISTS `market_order_item`;
+CREATE TABLE `market_order_item`  (
+  `id` int(11) UNSIGNED NOT NULL AUTO_INCREMENT COMMENT '订单详情ID',
+  `order_no` varchar(20) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '订单号',
+  `user_id` int(11) UNSIGNED NULL DEFAULT NULL COMMENT '用户ID',
+  `product_id` int(11) UNSIGNED NULL DEFAULT NULL COMMENT '商品ID',
+  `product_name` varchar(200) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '商品名称',
+  `product_picture` varchar(200) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '商品图片',
+  `package_id` varchar(20) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '严选平台包裹号',
+  `amount` bigint(12) UNSIGNED NULL DEFAULT NULL COMMENT '小计',
+  `create_time` datetime(0) NOT NULL DEFAULT CURRENT_TIMESTAMP(0) COMMENT '创建时间',
+  `update_time` datetime(0) NULL DEFAULT NULL ON UPDATE CURRENT_TIMESTAMP(0) COMMENT '修改时间',
+  PRIMARY KEY (`id`) USING BTREE,
+  INDEX `idx_order_no`(`order_no`) USING BTREE
+) ENGINE = InnoDB AUTO_INCREMENT = 4227 CHARACTER SET = utf8 COLLATE = utf8_general_ci COMMENT = '订单条目表' ROW_FORMAT = Dynamic;
+
 -- ----------------------------
 -- Table structure for market_collect
 -- ----------------------------

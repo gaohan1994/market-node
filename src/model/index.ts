@@ -25,3 +25,6 @@ export { default as ProductModel } from './product.model';
 export { default as AdminModel } from './admin.model';
 export { default as TypeModel } from './type.model';
 export { default as MessageModel } from './message.model';
+export { default as CollectModel } from './colllect.model';
+export { default as OrderModel } from './order.model';
+export { default as OrderItemModel } from './order.item.model';

@@ -6,9 +6,10 @@ import {
   TypeController, 
   MessageController, 
   FileController,
+  CollectController,
+  OrderController,
 } from "../controller";
 import multer from 'koa-multer';
-import Validator from '../middleware/validator';
 
 const upload = multer({ dest: "public/static" });
 
@@ -21,6 +22,21 @@ router.get('/product/list', ProductController.productList as any);
 router.post('/product/add', ProductController.productAdd as any);
 router.post('/product/delete', ProductController.productDelete as any);
 router.get('/product/detail', ProductController.productDetail as any);
+
+/**
+ * @todo [订单模块]
+ */
+router.post('/order/create', OrderController.orderCreate as any);
+router.post('/order/cancel', OrderController.orderCancel as any);
+router.get('/order/list', OrderController.orderList as any);
+
+/**
+ * @todo [商品收藏模块]
+ */
+router.post('/collect/add', CollectController.collectAdd as any);
+router.post('/collect/delete', CollectController.collectDelete as any);
+router.get('/collect/list', CollectController.collectList as any);
+router.get('/collect/product', CollectController.collect as any);
 
 /**
  * @todo [商品分类模块]
@@ -45,6 +61,7 @@ router.get('/admin/list', AdminController.adminList as any);
 /**
  * @todo [用户]
  */
+router.post('/user/login', UserController.userLogin as any);
 router.get('/user/list', UserController.userList as any);
 router.post('/user/add', UserController.userAdd as any);
 router.post('/user/detail', UserController.userDetail as any);

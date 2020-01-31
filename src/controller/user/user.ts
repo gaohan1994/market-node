@@ -7,6 +7,37 @@ import dayJs from 'dayjs';
 
 class UserController {
 
+  public userLogin = async (ctx: Koa.Context) => {
+    try {
+      const { 
+        username,
+        password,
+      } = ctx.request.body;
+      invariant(!!username, '用户名错误');
+      invariant(!!password, '密码错误');
+
+      const user = await UserModel.findOne({
+        where: { phone: username }, 
+        raw: true,
+        attributes: {
+          include: ['password']
+        }
+      });
+      invariant(!!user, '用户名错误');
+      invariant(user.password === util.md5(password), '密码错误');
+      ctx.response.body = {
+        code: responseCode.success,
+        data: user,
+        msg: '登录成功'
+      };
+    } catch (error) {
+      ctx.response.body = {
+        code: responseCode.error,
+        msg: error.message
+      };
+    }
+  }
+
   public userList = async (ctx: Koa.Context) => {
     try {
       const { offset = 0, limit = 20 } = ctx.request.query as CommonInterface.FetchField;
