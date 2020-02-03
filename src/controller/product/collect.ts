@@ -9,7 +9,7 @@ import dayJs from 'dayjs';
  * @Author: Ghan 
  * @Date: 2020-01-30 10:56:09 
  * @Last Modified by: Ghan
- * @Last Modified time: 2020-01-31 23:19:18
+ * @Last Modified time: 2020-01-31 23:27:13
  */
 
 class CollectController {
@@ -126,11 +126,10 @@ class CollectController {
 
   public collectDelete = async (ctx: Koa.Context) => {
     try {
-      const { user_id, id } = ctx.request.body;
-      invariant(!!user_id, '请传入用户id');
+      const { id } = ctx.request.body;
       invariant(!!id, '请传入收藏id');
 
-      const collect = await CollectModel.findOne({where: {user_id, id}, raw: true});
+      const collect = await CollectModel.findOne({where: {id}, raw: true});
       invariant(!!collect, '没有找到该收藏品');
 
       const result = await CollectModel.destroy({where: {id}});

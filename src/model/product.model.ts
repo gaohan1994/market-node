@@ -15,7 +15,7 @@ class ProductModel extends Model {
   public title!: string;
   public create_time!: string;
   public update_time!: string;
-  public pics!: string[];
+  public pics!: string;
 }
 
 ProductModel.init({
@@ -36,7 +36,7 @@ ProductModel.init({
   title: { type: DataTypes.STRING },
   create_time: { type: DataTypes.STRING },
   update_time: { type: DataTypes.STRING },
-  pics: { type: new DataTypes.ARRAY(DataTypes.STRING) }
+  pics: { type: DataTypes.STRING }
 }, {
   sequelize,
   freezeTableName: true,

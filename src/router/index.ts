@@ -8,10 +8,20 @@ import {
   FileController,
   CollectController,
   OrderController,
+  QiniuController,
 } from "../controller";
 import multer from 'koa-multer';
 
-const upload = multer({ dest: "public/static" });
+const storage = multer.diskStorage({
+  destination: 'public/static',
+  filename: (req, file, callback) => {
+    const singfileArray = file.originalname.split('.');
+    const fileExtension = singfileArray[singfileArray.length - 1];
+    callback(null, singfileArray[0] + "." + fileExtension);
+  }
+});
+
+const upload = multer({ storage });
 
 const router = new Router();
 
@@ -22,6 +32,7 @@ router.get('/product/list', ProductController.productList as any);
 router.post('/product/add', ProductController.productAdd as any);
 router.post('/product/delete', ProductController.productDelete as any);
 router.get('/product/detail', ProductController.productDetail as any);
+router.get('/product/search', ProductController.productSearch as any);
 
 /**
  * @todo [订单模块]
@@ -79,6 +90,7 @@ router.post('/message/delete', MessageController.messageDelete as any);
  * @todo [图片上传系统]
  */
 router.post('/upload/image', upload.single('image'), FileController.uploadImage as any);
+router.post('/upload/qiniu/image', upload.single('image'), QiniuController.qiniuUploadFile as any);
 router.post('/upload/images', upload.array('images', 12), FileController.uploadImages as any);
 
 export default router;

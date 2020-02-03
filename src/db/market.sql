@@ -156,7 +156,7 @@ CREATE TABLE `market_item`  (
   `amount` bigint(20) NULL DEFAULT NULL COMMENT '价格',
   `exp_fee` bigint(20) NOT NULL DEFAULT 0 COMMENT '邮费',
   `status` tinyint(1) NOT NULL DEFAULT 1 COMMENT '状态（0：已删除，1：有效，2：已下架，3：已锁定，4：已售出，5：已收货）',
-  `pics` varchar(200) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '图片文件夹地址',
+  `pics` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '图片文件夹地址',
   `create_time` datetime(0) NULL DEFAULT CURRENT_TIMESTAMP(0) COMMENT '创建时间',
   `update_time` datetime(0) NULL DEFAULT NULL COMMENT '修改时间',
   PRIMARY KEY (`id`) USING BTREE

@@ -1,17 +1,56 @@
 import Koa from 'koa';
+import { Op } from 'sequelize';
 import { ProductModel, UserModel, TypeModel, CollectModel } from '../../model';
 import { responseCode, CommonInterface } from '../config';
 import invariant from 'invariant';
 import dayJs from 'dayjs';
 
 class ProductController {
+
+  public productSearch = async (ctx: Koa.Context) => {
+    try {
+      const { word } = ctx.request.query;
+      invariant(!!word, '请输入要查询的商品名称');
+      const result = await ProductModel.findAll({
+        where: {
+          [Op.or]: [
+            { 
+              title: {
+                [Op.like]: `%${word}%`
+              }
+            },
+            {
+              description: {
+                [Op.like]: `%${word}%`
+              }
+            }
+          ]
+        },
+        include: [{
+          model: UserModel,
+          as: 'userinfo',
+          attributes: ['user_id', ['name', 'username'], 'avatar', 'sex']
+        }],
+      });
+      ctx.response.body = {
+        code: responseCode.success,
+        data: result
+      };
+    } catch (error) {
+      ctx.response.body = {
+        code: responseCode.error,
+        msg: error.message
+      };
+    }
+  }
   
   public productList = async (ctx: Koa.Context) => {
     try {
-      const { offset = 0, limit = 20 } = ctx.request.query as CommonInterface.FetchField;
+      const { offset = 0, limit = 20, order } = ctx.request.query as CommonInterface.FetchField;
       const result = await ProductModel.findAndCountAll({
         offset: Number(offset),
         limit: Number(limit),
+        order: [['create_time', 'DESC']],
         where: {
           status: 1
         },
@@ -74,7 +113,7 @@ class ProductController {
         amount,
         exp_fee,
         status,
-        pics,
+        pics = [],
       } = ctx.request.body;
 
       /**

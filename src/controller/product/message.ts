@@ -2,7 +2,7 @@
  * @Author: Ghan 
  * @Date: 2020-01-25 21:51:50 
  * @Last Modified by: Ghan
- * @Last Modified time: 2020-01-26 01:44:24
+ * @Last Modified time: 2020-02-02 10:51:59
  */
 import Koa from 'koa';
 import { MessageModel, ProductModel, UserModel } from '../../model';
@@ -123,41 +123,52 @@ class MessageController {
         limit: Number(limit),
       });
 
-      const data = JSON.parse(JSON.stringify(rows));
-
-      const promise = new Promise((resolve, reject) => {
-        
-        data.forEach(async (topMessage: any, index: number) => {
-          const secondMessages = await MessageModel.findAll({
-            where: {
-              item_id,
-              parent_id: topMessage.id,
-            },
-            order: [['create_time', 'DESC']],
-            include: [{
-              model: UserModel,
-              as: 'userinfo',
-              attributes: ['user_id', ['name', 'username'], 'avatar', 'sex']
-            }],
+      if (count > 0 && !!rows) {
+        const data = JSON.parse(JSON.stringify(rows));
+        const promise = new Promise((resolve, reject) => {
+          
+          data.forEach(async (topMessage: any, index: number) => {
+            const secondMessages = await MessageModel.findAll({
+              where: {
+                item_id,
+                parent_id: topMessage.id,
+              },
+              order: [['create_time', 'DESC']],
+              include: [{
+                model: UserModel,
+                as: 'userinfo',
+                attributes: ['user_id', ['name', 'username'], 'avatar', 'sex']
+              }],
+            });
+            const secondMessageJson = JSON.parse(JSON.stringify(secondMessages));
+            if (!!secondMessages) {
+              data[index].subMessage = secondMessageJson;
+            }
+            if (index === data.length - 1) {
+              resolve(data);
+            }
           });
-          const secondMessageJson = JSON.parse(JSON.stringify(secondMessages));
-          if (!!secondMessages) {
-            data[index].subMessage = secondMessageJson;
-          }
-          if (index === data.length - 1) {
-            resolve(data);
-          }
         });
-      });
 
-      const resolveData = await promise;
-      ctx.response.body = {
-        code: responseCode.success,
-        data: {
-          count,
-          rows: resolveData
-        },
-      };
+        const resolveData = await promise;
+        ctx.response.body = {
+          code: responseCode.success,
+          data: {
+            count,
+            rows: resolveData
+          },
+        };
+        return;
+      } else {
+        ctx.response.body = {
+          code: responseCode.success,
+          data: {
+            count,
+            rows,
+          },
+        };
+      }
+
     } catch (error) {
       ctx.response.body = {
         code: responseCode.error,
