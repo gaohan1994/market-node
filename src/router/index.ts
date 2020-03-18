@@ -9,6 +9,7 @@ import {
   CollectController,
   OrderController,
   QiniuController,
+  TopicController,
 } from "../controller";
 import multer from 'koa-multer';
 
@@ -26,10 +27,17 @@ const upload = multer({ storage });
 const router = new Router();
 
 /**
+ * @todo [帖子模块]
+ */
+router.get('/topic/list', TopicController.topicList as any);
+router.post('/topic/add', TopicController.topicAdd as any);
+
+/**
  * @todo [商品模块]
  */
 router.get('/product/list', ProductController.productList as any);
 router.post('/product/add', ProductController.productAdd as any);
+router.get('/product/random', ProductController.productListRandom as any);
 router.post('/product/delete', ProductController.productDelete as any);
 router.get('/product/detail', ProductController.productDetail as any);
 router.get('/product/search', ProductController.productSearch as any);
@@ -40,6 +48,7 @@ router.get('/product/search', ProductController.productSearch as any);
 router.post('/order/create', OrderController.orderCreate as any);
 router.post('/order/cancel', OrderController.orderCancel as any);
 router.get('/order/list', OrderController.orderList as any);
+router.get('/order/detail', OrderController.orderDetail as any);
 
 /**
  * @todo [商品收藏模块]

@@ -28,3 +28,4 @@ export { default as MessageModel } from './message.model';
 export { default as CollectModel } from './colllect.model';
 export { default as OrderModel } from './order.model';
 export { default as OrderItemModel } from './order.item.model';
+export { default as TopicModel } from './topic.model';

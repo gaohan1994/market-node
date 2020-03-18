@@ -1,9 +1,8 @@
 import Koa from 'koa';
 import invariant from 'invariant';
 import { responseCode } from '../config';
-import { UserModel, OrderModel, OrderItemModel, ProductModel } from '../../model';
+import { UserModel, OrderModel, ProductModel } from '../../model';
 import dayJs from 'dayjs';
-import sequelize from '../../model/index';
 
 class OrderController {
 
@@ -60,6 +59,7 @@ class OrderController {
         create_time: dayJs().format('YYYY-MM-DD HH:mm:ss'),
         update_time: dayJs().format('YYYY-MM-DD HH:mm:ss'),
       };
+      console.log('newOrder: ', newOrder);
       const result = await OrderModel.create(newOrder);
       invariant(!!result, '下单失败');
       
@@ -67,10 +67,38 @@ class OrderController {
         {status: 4}, 
         {where: {id: product_id}
       });
+      console.log('productStatus: ', productStatus);
       ctx.response.body = {
         code: responseCode.success,
         msg: '下单成功',
         data: result
+      };
+    } catch (error) {
+      ctx.response.body = {
+        code: responseCode.error,
+        msg: error.message
+      };
+    }
+  }
+
+  public orderDetail = async (ctx: Koa.Context) => {
+    try {
+      const { order_no } = ctx.request.query;
+      invariant(!!order_no, '请传入订单编号');
+      
+      const order = await OrderModel.findOne({
+        where: {order_no}, 
+        include: [{
+          model: UserModel,
+          as: 'userinfo',
+        }],
+        raw: false
+      });
+      invariant(!!order, '没有找到该订单');
+
+      ctx.response.body = {
+        code: responseCode.success,
+        data: order,
       };
     } catch (error) {
       ctx.response.body = {

@@ -85,7 +85,7 @@ class ProductController {
           status: 1,
         },
         offset: 0,
-        limit: 20,
+        limit: 4,
         raw: true
       });
       ctx.response.body = {

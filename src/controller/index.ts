@@ -7,3 +7,4 @@ export { default as FileController } from './file/file';
 export { default as CollectController } from './product/collect';
 export { default as OrderController } from './order/order';
 export { default as QiniuController } from './qiniu/qiniu';
+export { default as TopicController } from './topic/topic';
