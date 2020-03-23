@@ -117,7 +117,7 @@ class MessageController {
         include: [{
           model: UserModel,
           as: 'userinfo',
-          attributes: ['user_id', ['name', 'username'], 'avatar', 'sex']
+          // attributes: ['user_id', ['name', 'username'], 'avatar', 'sex']
         }],
         offset: Number(offset),
         limit: Number(limit),
@@ -137,7 +137,7 @@ class MessageController {
               include: [{
                 model: UserModel,
                 as: 'userinfo',
-                attributes: ['user_id', ['name', 'username'], 'avatar', 'sex']
+                // attributes: ['user_id', ['name', 'username'], 'avatar', 'sex']
               }],
             });
             const secondMessageJson = JSON.parse(JSON.stringify(secondMessages));

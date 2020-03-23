@@ -5,10 +5,15 @@ class UserModel extends Model {
   public user_id!: number;
   public name!: string;
   public phone!: string;
-  public password!: string;
-  public avatar!: string;
-  public sex!: number;
   public birthday!: string;
+  public openId!: string;
+  public avatarUrl!: string;
+  public city!: string;
+  public country!: string;
+  public nickName!: string;
+  public language!: string;
+  public province!: string;
+  public gender!: number;
   public intro!: string;
   public school!: string;
   public create_time!: string;
@@ -21,11 +26,16 @@ UserModel.init({
     primaryKey: true,
     autoIncrement: true
   },
-  password: { type: DataTypes.STRING },
+  openId: { type: DataTypes.STRING, field: 'openId' },
+  avatarUrl: { type: DataTypes.STRING },
+  city: { type: DataTypes.STRING },
+  country: { type: DataTypes.STRING },
+  nickName: { type: DataTypes.STRING },
+  language: { type: DataTypes.STRING },
+  province: { type: DataTypes.STRING },
+  gender: { type: DataTypes.INTEGER },
   phone: { type: DataTypes.STRING },
   name: { type: DataTypes.STRING },
-  avatar: { type: DataTypes.STRING },
-  sex: { type: DataTypes.INTEGER },
   birthday: { type: DataTypes.STRING },
   intro: { type: DataTypes.STRING },
   school: { type: DataTypes.STRING },
@@ -35,11 +45,6 @@ UserModel.init({
   sequelize,
   freezeTableName: true,
   modelName: 'user_inf',
-  defaultScope: {
-    attributes: {
-      exclude: ['password']
-    }
-  }
 });
 
 export default UserModel;

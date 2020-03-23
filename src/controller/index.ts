@@ -8,3 +8,4 @@ export { default as CollectController } from './product/collect';
 export { default as OrderController } from './order/order';
 export { default as QiniuController } from './qiniu/qiniu';
 export { default as TopicController } from './topic/topic';
+export { default as WeixinHelper } from './weixin/weixin';

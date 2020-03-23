@@ -65,7 +65,9 @@ class CollectController {
           include: [{
             model: UserModel,
             as: 'userinfo',
-            attributes: ['user_id', ['name', 'username'], 'avatar', 'sex']
+            attributes: {
+              exclude: [],
+            }
           }],
         }],
         attributes: ['id', 'status', 'user_id'],

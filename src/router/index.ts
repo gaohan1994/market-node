@@ -10,6 +10,7 @@ import {
   OrderController,
   QiniuController,
   TopicController,
+  WeixinHelper,
 } from "../controller";
 import multer from 'koa-multer';
 
@@ -101,5 +102,10 @@ router.post('/message/delete', MessageController.messageDelete as any);
 router.post('/upload/image', upload.single('image'), FileController.uploadImage as any);
 router.post('/upload/qiniu/image', upload.single('image'), QiniuController.qiniuUploadFile as any);
 router.post('/upload/images', upload.array('images', 12), FileController.uploadImages as any);
+
+/**
+ * @todo [微信相关]
+ */
+router.post('/weixin/decrypt', WeixinHelper.decryptData as any);
 
 export default router;

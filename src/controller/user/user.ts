@@ -60,36 +60,61 @@ class UserController {
 
   public userAdd = async (ctx: Koa.Context) => {
     try {
-      const { 
-        name,
-        avatar,
+      const {
         phone,
-        sex,
-        password,
         birthday,
         intro,
         school,
+        openId,
+        avatarUrl,
+        city,
+        country,
+        nickName,
+        language,
+        province,
+        gender,
       } = ctx.request.body;
       
-      invariant(!!phone, '手机不能为空');
-      invariant(!!name, '手机不能为空');
-      invariant(!!password, '密码不能为空');
-      
-      const user = await UserModel.findOne({ where: { phone }, raw: true });
-      invariant(!user, '该用户已存在!');
+      console.log('phone: ', phone);
+      console.log('birthday: ', birthday);
+      console.log('intro: ', intro);
+      console.log('school: ', school);
+      console.log('openId: ', openId);
+      console.log('avatarUrl: ', avatarUrl);
+      console.log('city: ', city);
+      console.log('country: ', country);
+      console.log('nickName: ', nickName);
+      console.log('language: ', language);
+      console.log('province: ', province);
+      console.log('gender: ', gender);
+
+      const user = await UserModel.findOne({ where: { openId }, raw: true });
+      console.log('user: ', user);
+      if (!!user) {
+        ctx.response.body = {
+          code: responseCode.success,
+          data: user,
+          msg: '登录成功!'
+        };
+        return;
+      }
       
       const newUser = {
-        name,
-        avatar,
         phone,
-        sex,
-        password: util.md5(password),
         birthday,
         intro,
         school,
+        openId,
+        avatarUrl,
+        city,
+        country,
+        nickName,
+        language,
+        province,
+        gender,
         create_time: dayJs().format('YYYY-MM-DD HH:mm:ss')
       };
-
+      console.log('newUser: ', newUser);
       const result = await UserModel.create(newUser);
 
       invariant(!!result.user_id, '创建失败');

@@ -29,7 +29,9 @@ class ProductController {
         include: [{
           model: UserModel,
           as: 'userinfo',
-          attributes: ['user_id', ['name', 'username'], 'avatar', 'sex']
+          attributes: {
+            exclude: [],
+          }
         }],
       });
       ctx.response.body = {
@@ -57,7 +59,10 @@ class ProductController {
         include: [{
           model: UserModel,
           as: 'userinfo',
-          attributes: ['user_id', ['name', 'username'], 'avatar', 'sex']
+          // attributes: ['user_id', ['name', 'username'], 'avatar', 'sex']
+          attributes: {
+            exclude: [],
+          }
         }],
       }); 
       ctx.response.body = {
@@ -239,7 +244,10 @@ class ProductController {
         include: [{
           model: UserModel,
           as: 'userinfo',
-          attributes: ['user_id', ['name', 'username'], 'avatar', 'sex']
+          // attributes: ['user_id', ['name', 'username'], 'avatar', 'sex']
+          attributes: {
+            exclude: [],
+          }
         }],
         raw: false
       });
