@@ -12,6 +12,7 @@ class MessageModel extends Model {
   content: string;
   thumbs: number;
   bit_log: number;
+  type: number;
   create_time: string;
   update_time: string;
 }
@@ -22,6 +23,7 @@ MessageModel.init({
     primaryKey: true,
     autoIncrement: true
   },
+  type: { type: DataTypes.INTEGER },
   seller_id: { type: DataTypes.INTEGER },
   item_id: { type: DataTypes.INTEGER },
   parent_id: { type: DataTypes.INTEGER },

@@ -211,6 +211,7 @@ CREATE TABLE `market_message`  (
   `reply_id` int(11) UNSIGNED NULL DEFAULT 0 COMMENT '回复对象ID',
   `user_id` int(11) NULL DEFAULT NULL COMMENT '留言者ID',
   `content` text CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL COMMENT '留言内容',
+  `type` int(11) NULL DEFAULT NULL COMMENT '留言类型0:商品1:帖子',
   `thumbs` int(10) NULL DEFAULT 0 COMMENT '点赞数',
   `bit_log` text CHARACTER SET utf8 COLLATE utf8_general_ci NULL COMMENT 'bitMap统计',
   `create_time` datetime(0) NULL DEFAULT CURRENT_TIMESTAMP(0) COMMENT '创建时间',

@@ -2,10 +2,10 @@
  * @Author: Ghan 
  * @Date: 2020-01-25 21:51:50 
  * @Last Modified by: Ghan
- * @Last Modified time: 2020-02-02 10:51:59
+ * @Last Modified time: 2020-03-24 14:45:32
  */
 import Koa from 'koa';
-import { MessageModel, ProductModel, UserModel } from '../../model';
+import { MessageModel, ProductModel, UserModel, TopicModel } from '../../model';
 import { responseCode, CommonInterface } from '../config';
 import invariant from 'invariant';
 import dayJs from 'dayjs';
@@ -28,6 +28,7 @@ class MessageController {
         reply_id,
         user_id,
         content,
+        type = 0,
       } = ctx.request.body;
 
       /**
@@ -37,19 +38,27 @@ class MessageController {
       invariant(!!user_id, '请传入评论者id');
       invariant(!!content, '请输入评论内容');
 
-      const product = await ProductModel.findOne({where: {id: item_id}, raw: true});
-      invariant(!!product, '没有找到要评论的商品');
+      let item;
+
+      if (type === 0) {
+        item = await ProductModel.findOne({where: {id: item_id}, raw: true});
+        invariant(!!item, '没有找到要评论的商品');
+      } else {
+        item = await TopicModel.findOne({where: {id: item_id}, raw: true});
+        invariant(!!item, '没有找到要评论的帖子');
+      }
 
       const user = await UserModel.findOne({where: {user_id}, raw: true});
       invariant(!!user, '没有找到评论者');
 
       const newMessage = {
-        seller_id: product.user_id,
+        seller_id: item.user_id,
         item_id,
         parent_id,
         reply_id,
         user_id,
         content,
+        type,
         create_time: dayJs().format('YYYY-MM-DD HH:mm:ss'),
         update_time: dayJs().format('YYYY-MM-DD HH:mm:ss'),
       };
@@ -99,25 +108,21 @@ class MessageController {
 
   public messageList = async (ctx: Koa.Context) => {
     try {
-      const { item_id, offset = 0, limit = 20 }: { item_id: number } & CommonInterface.FetchField = ctx.request.query;
+      const { item_id, type = 0, offset = 0, limit = 20 }: { item_id: number, type: number } & CommonInterface.FetchField = ctx.request.query;
       invariant(!!item_id, '请传入要查询评论的商品id');
-
-      const product = await ProductModel.findOne({where: { id: item_id }, raw: true});
-      invariant(!!product, '没有找到要查询的商品');
-
       /**
        * @todo [按照分页找到所有一级评论，然后找到这些一级评论的所有子评论]
        */
       const { count, rows } = await MessageModel.findAndCountAll({
         where: { 
           item_id,
-          parent_id: 0
+          parent_id: 0,
+          type,
         },
         order: [['create_time', 'DESC']],
         include: [{
           model: UserModel,
           as: 'userinfo',
-          // attributes: ['user_id', ['name', 'username'], 'avatar', 'sex']
         }],
         offset: Number(offset),
         limit: Number(limit),
@@ -132,6 +137,7 @@ class MessageController {
               where: {
                 item_id,
                 parent_id: topMessage.id,
+                type,
               },
               order: [['create_time', 'DESC']],
               include: [{
