@@ -1,7 +1,7 @@
 import Koa from 'koa';
 import { Op } from 'sequelize';
 import { ProductModel, UserModel, TypeModel, CollectModel } from '../../model';
-import { responseCode, CommonInterface } from '../config';
+import util, { responseCode, CommonInterface } from '../config';
 import invariant from 'invariant';
 import dayJs from 'dayjs';
 
@@ -141,6 +141,8 @@ class ProductController {
         invariant(!!productType, '商品分类不存在');
       }
 
+      const images = !!pics ? await util.saveImage(pics) : '';
+
       const newProduct = {
         user_id: user.user_id,
         viewing_count: Math.ceil(Math.random() * 1000),
@@ -152,7 +154,7 @@ class ProductController {
         amount,
         exp_fee,
         status,
-        pics,
+        pics: images,
         create_time: dayJs().format('YYYY-MM-DD HH:mm:ss'),
       };
       const result = await ProductModel.create(newProduct);

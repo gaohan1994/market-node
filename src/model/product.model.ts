@@ -1,5 +1,6 @@
 import { Model, DataTypes } from 'sequelize';
 import sequelize, { UserModel } from './index';
+import util from '../controller/config';
 
 class ProductModel extends Model {
   public id!: number;
@@ -41,6 +42,30 @@ ProductModel.init({
   sequelize,
   freezeTableName: true,
   modelName: 'market_item',
+  hooks: {
+    afterFind: async (product) => {
+      /**
+       * @todo [如果有图片则从image表中拿]
+       */
+      if (!!Array.isArray(product)) {
+        for (const item of product) {
+          if (!!item.pics) {
+            const pics = await util.images(item.pics);
+            item.pics = pics as any;
+          } else {
+            item.pics = [] as any;
+          }
+        }
+      } else {
+        if (!!product.pics) {
+          const pics = await util.images(product.pics);
+          product.pics = pics as any;
+        } else {
+          product.pics = [] as any;
+        }
+      }
+    },
+  }
 });
 
 ProductModel.belongsTo(UserModel, {

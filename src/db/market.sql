@@ -40,6 +40,13 @@ CREATE TABLE `sys_user`  (
   UNIQUE INDEX `uk_login_name`(`login_name`) USING BTREE
 ) ENGINE = InnoDB AUTO_INCREMENT = 1 CHARACTER SET = utf8 COLLATE = utf8_general_ci COMMENT = '用户信息表' ROW_FORMAT = Dynamic;
 
+DROP TABLE IF EXISTS `market_image`;
+CREATE TABLE `market_image`  (
+  `id` int(11) UNSIGNED NOT NULL AUTO_INCREMENT COMMENT '图片id',
+  `url` varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '图片地址',
+  PRIMARY KEY (`id`) USING BTREE
+) ENGINE = InnoDB CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci COMMENT = '图片表' ROW_FORMAT = Dynamic;
+
 -- ----------------------------
 -- Table structure for user_inf
 -- ----------------------------

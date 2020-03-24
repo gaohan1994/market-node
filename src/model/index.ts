@@ -21,6 +21,7 @@ export { sequelize };
 export default sequelize;
 
 export { default as UserModel } from './user.model';
+export { default as ImageModel } from './image.model';
 export { default as ProductModel } from './product.model';
 export { default as AdminModel } from './admin.model';
 export { default as TypeModel } from './type.model';

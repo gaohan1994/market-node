@@ -31,6 +31,7 @@ const router = new Router();
  * @todo [帖子模块]
  */
 router.get('/topic/list', TopicController.topicList as any);
+router.get('/topic/detail', TopicController.topicDetail as any);
 router.post('/topic/add', TopicController.topicAdd as any);
 
 /**

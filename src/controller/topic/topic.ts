@@ -3,17 +3,45 @@
  * @Author: Ghan 
  * @Date: 2020-03-04 11:18:04 
  * @Last Modified by: Ghan
- * @Last Modified time: 2020-03-04 16:19:15
+ * @Last Modified time: 2020-03-24 11:59:40
  */
 
 import Koa from 'koa';
 import { Op } from 'sequelize';
 import { UserModel, TopicModel } from '../../model';
-import { responseCode, CommonInterface } from '../config';
+import util, { responseCode, CommonInterface } from '../config';
 import invariant from 'invariant';
 import dayJs from 'dayjs';
 
 class TopicController {
+
+  public topicDetail = async (ctx: Koa.Context) => {
+    try {
+      const { id } = ctx.request.query;
+      invariant(!!id, '请传入要查询的帖子id');
+
+      const topic = await TopicModel.findOne({
+        where: {id}, 
+        include: [{
+          model: UserModel,
+          as: 'userinfo',
+        }],
+        raw: false
+      });
+      invariant(!!topic, '没有找到该帖子详情');
+      TopicModel.update({viewing_count: topic.viewing_count + 1}, {where: {id}});
+
+      ctx.response.body = {
+        code: responseCode.success,
+        data: topic
+      };
+    } catch (error) {
+      ctx.response.body = {
+        code: responseCode.error,
+        msg: error.message
+      };
+    }
+  }
 
   public topicList = async (ctx: Koa.Context) => {
     try {
@@ -28,8 +56,7 @@ class TopicController {
         include: [{
           model: UserModel,
           as: 'userinfo',
-          attributes: ['user_id', ['name', 'username'], 'avatar', 'sex']
-        }],
+        }]
       }); 
       ctx.response.body = {
         code: responseCode.success,
@@ -92,7 +119,6 @@ class TopicController {
         user_id,
         title,
         description,
-        content,
         type,
         status,
         pics,
@@ -103,7 +129,7 @@ class TopicController {
        */
       invariant(!!user_id, '请先验证身份信息');
       invariant(!!title, '商品标题不能为空');
-      invariant(!!content, '请输入帖子内容');
+      invariant(!!description, '请输入帖子内容');
 
       /**
        * @todo [第二步从数据库中查询用户信息是否存在]
@@ -116,7 +142,9 @@ class TopicController {
       //   const productType = await TypeModel.findOne({where: {id: type}});
       //   invariant(!!productType, '商品分类不存在');
       // }
-
+      const images = !!pics ? await util.saveImage(pics) : '';
+      console.log('images: ', images);
+      
       const newTopic = {
         user_id: user.user_id,
         viewing_count: Math.ceil(Math.random() * 1000),
@@ -126,8 +154,7 @@ class TopicController {
         description,
         type,
         status,
-        pics,
-        content,
+        pics: images,
         create_time: dayJs().format('YYYY-MM-DD HH:mm:ss'),
       };
       const result = await TopicModel.create(newTopic);
