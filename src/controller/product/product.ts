@@ -1,6 +1,6 @@
 import Koa from 'koa';
 import { Op } from 'sequelize';
-import { ProductModel, UserModel, TypeModel, CollectModel } from '../../model';
+import { ProductModel, UserModel, TypeModel } from '../../model';
 import util, { responseCode, CommonInterface } from '../config';
 import invariant from 'invariant';
 import dayJs from 'dayjs';

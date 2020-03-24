@@ -136,6 +136,7 @@ CREATE TABLE `market_collect`  (
   `user_id` int(11) NOT NULL COMMENT '用户编号',
   `item_id` int(11) NOT NULL COMMENT '商品编号',
   `status` tinyint(1) NOT NULL DEFAULT 1 COMMENT '状态（0：无效，1：有效）',
+  `type` tinyint(1) NOT NULL DEFAULT 1 COMMENT '收藏类别（0：商品，1：帖子）',
   `create_time` datetime(0) NULL DEFAULT CURRENT_TIMESTAMP(0) COMMENT '创建时间',
   `update_time` datetime(0) NULL DEFAULT NULL ON UPDATE CURRENT_TIMESTAMP(0) COMMENT '修改时间',
   PRIMARY KEY (`id`) USING BTREE

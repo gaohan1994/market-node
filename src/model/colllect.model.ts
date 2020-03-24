@@ -6,6 +6,7 @@ class CollectModel extends Model {
   user_id: number;
   item_id: number;
   status: number;
+  type: number;
   create_time: string;
   update_time: string;
 }
@@ -16,6 +17,7 @@ CollectModel.init({
     primaryKey: true,
     autoIncrement: true
   },
+  type: { type: DataTypes.INTEGER },
   user_id: { type: DataTypes.INTEGER },
   item_id: { type: DataTypes.INTEGER },
   status: { type: DataTypes.INTEGER },

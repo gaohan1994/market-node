@@ -9,14 +9,14 @@ import dayJs from 'dayjs';
  * @Author: Ghan 
  * @Date: 2020-01-30 10:56:09 
  * @Last Modified by: Ghan
- * @Last Modified time: 2020-01-31 23:27:13
+ * @Last Modified time: 2020-03-24 15:29:10
  */
 
 class CollectController {
 
   public collect = async (ctx: Koa.Context) => {
     try {
-      const { user_id, product_id } = ctx.request.query;
+      const { user_id, product_id, type = 0 } = ctx.request.query;
       invariant(!!user_id, '请传入用户id');
       invariant(!!product_id, '请传入商品id');
 
@@ -24,8 +24,8 @@ class CollectController {
         where: {
           user_id,
           item_id: product_id,
+          type,
         },
-        attributes: ['id', 'user_id', 'item_id'],
         raw: true
       });
       console.log('collect: ', collect);
@@ -35,6 +35,7 @@ class CollectController {
       } : {
         user_id,
         item_id: product_id,
+        type,
         collect: !!(collect && collect.id)
       };
       console.log('data: ', data);
@@ -52,12 +53,13 @@ class CollectController {
 
   public collectList = async (ctx: Koa.Context) => {
     try {
-      const { offset = 0, limit = 20, user_id } = ctx.request.query;
+      const { offset = 0, limit = 20, user_id, type = 0 } = ctx.request.query;
       invariant(!!user_id, '请传入用户id');
       const result = await CollectModel.findAndCountAll({
         where: {
           status: 1,
           user_id,
+          type,
         },
         include: [{
           model: ProductModel,
@@ -89,18 +91,17 @@ class CollectController {
 
   public collectAdd = async (ctx: Koa.Context) => {
     try {
-      const { user_id, item_id } = ctx.request.body;
+      const { user_id, item_id, type = 0 } = ctx.request.body;
       invariant(!!user_id, '请传入用户id');
       invariant(!!item_id, '请传入商品id');
 
       const user = await UserModel.findOne({where: { user_id }, raw: true});
       invariant(!!user, '没有找到该用户');
-      const product = await ProductModel.findOne({where: { id: item_id }, raw: true });
-      invariant(!!product, '没有找到要收藏的商品');
       const collect = await CollectModel.findOne({
         where: {
           user_id,
-          item_id
+          item_id,
+          type
         },
         raw: true
       });
@@ -109,6 +110,7 @@ class CollectController {
       const result = await CollectModel.create({
         user_id,
         item_id,
+        type,
         create_time: dayJs().format('YYYY-MM-DD HH:mm:ss'),
         update_time: dayJs().format('YYYY-MM-DD HH:mm:ss'),
       });
