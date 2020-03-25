@@ -3,7 +3,7 @@
  * @Author: Ghan 
  * @Date: 2020-03-04 11:18:04 
  * @Last Modified by: Ghan
- * @Last Modified time: 2020-03-24 15:56:19
+ * @Last Modified time: 2020-03-25 15:07:11
  */
 
 import Koa from 'koa';
@@ -45,13 +45,14 @@ class TopicController {
 
   public topicList = async (ctx: Koa.Context) => {
     try {
-      const { offset = 0, limit = 20, order } = ctx.request.query as CommonInterface.FetchField;
+      const { offset = 0, limit = 20, type } = ctx.request.query;
       const result = await TopicModel.findAndCountAll({
         offset: Number(offset),
         limit: Number(limit),
         order: [['create_time', 'DESC']],
         where: {
-          status: 1
+          status: 1,
+          ...type ? {type} : {}
         },
         include: [{
           model: UserModel,
@@ -128,8 +129,9 @@ class TopicController {
        * @todo [第一步验证商品信息是否齐全]
        */
       invariant(!!user_id, '请先验证身份信息');
-      invariant(!!title, '商品标题不能为空');
+      invariant(!!title, '帖子标题不能为空');
       invariant(!!description, '请输入帖子内容');
+      invariant(!!type, '请传入帖子分类');
 
       /**
        * @todo [第二步从数据库中查询用户信息是否存在]
@@ -138,10 +140,6 @@ class TopicController {
       const user = await UserModel.findOne({where: user_id, raw: true});
       invariant(!!user, '该用户不存在');
 
-      // if (type !== undefined) {
-      //   const productType = await TypeModel.findOne({where: {id: type}});
-      //   invariant(!!productType, '商品分类不存在');
-      // }
       const images = !!pics ? await util.saveImage(pics) : '';
       const newTopic = {
         user_id: user.user_id,
