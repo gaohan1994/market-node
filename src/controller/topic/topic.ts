@@ -3,7 +3,7 @@
  * @Author: Ghan 
  * @Date: 2020-03-04 11:18:04 
  * @Last Modified by: Ghan
- * @Last Modified time: 2020-03-24 11:59:40
+ * @Last Modified time: 2020-03-24 15:56:19
  */
 
 import Koa from 'koa';
@@ -143,8 +143,6 @@ class TopicController {
       //   invariant(!!productType, '商品分类不存在');
       // }
       const images = !!pics ? await util.saveImage(pics) : '';
-      console.log('images: ', images);
-      
       const newTopic = {
         user_id: user.user_id,
         viewing_count: Math.ceil(Math.random() * 1000),

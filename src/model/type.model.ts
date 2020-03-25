@@ -5,6 +5,7 @@ import sequelize from './index';
 class TypeModel extends Model {
   id!: number;
   name!: string;
+  type!: number;
   picture!: string;
   create_time!: string;
   update_time!: string;
@@ -16,6 +17,7 @@ TypeModel.init({
     primaryKey: true,
     autoIncrement: true
   },
+  type: { type: DataTypes.INTEGER },
   name: { type: DataTypes.STRING },
   create_time: { type: DataTypes.STRING },
   update_time: { type: DataTypes.STRING },

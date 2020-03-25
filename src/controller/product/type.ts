@@ -8,7 +8,8 @@ class TypeController {
 
   public typeList = async (ctx: Koa.Context) => {
     try {
-      const result = await TypeModel.findAll(); 
+      const { type = 0 } = ctx.request.query;
+      const result = await TypeModel.findAll({where: {type}}); 
       ctx.response.body = {
         code: responseCode.success,
         data: result
@@ -26,17 +27,18 @@ class TypeController {
       const { 
         name,
         picture,
+        type,
       } = ctx.request.body;
       invariant(!!name, '请输入商品分类名称');
-      const type = await TypeModel.findOne({where: {name}, raw: true});
-      invariant(!type, '该分类已存在');
+      const typeExit = await TypeModel.findOne({where: {name}, raw: true});
+      invariant(!typeExit, '该分类已存在');
 
       const newType = {
         name,
-        picture
+        picture,
+        type,
       };
       const result = await TypeModel.create(newType);
-      console.log('result: ', result);
       invariant(!!result, '新增商品分类失败');
       ctx.response.body = {
         code: responseCode.success,
