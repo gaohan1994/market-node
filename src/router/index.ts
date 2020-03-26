@@ -94,6 +94,7 @@ router.post('/user/delete', UserController.userDelete as any);
  * @todo [评论模块]
  */
 router.get('/message/list', MessageController.messageList as any);
+router.get('/message/list/user', MessageController.messageUserList as any);
 router.post('/message/add', MessageController.messageAdd as any);
 router.post('/message/delete', MessageController.messageDelete as any);
 

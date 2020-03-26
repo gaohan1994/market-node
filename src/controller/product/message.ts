@@ -2,7 +2,7 @@
  * @Author: Ghan 
  * @Date: 2020-01-25 21:51:50 
  * @Last Modified by: Ghan
- * @Last Modified time: 2020-03-24 14:45:32
+ * @Last Modified time: 2020-03-26 16:58:15
  */
 import Koa from 'koa';
 import { MessageModel, ProductModel, UserModel, TopicModel } from '../../model';
@@ -98,6 +98,67 @@ class MessageController {
         code: responseCode.success,
         msg: '删除成功'
       };
+    } catch (error) {
+      ctx.response.body = {
+        code: responseCode.error,
+        msg: error.message
+      };
+    }
+  }
+
+  public messageUserList = async (ctx: Koa.Context) => {
+    try {
+      const { type, user_id, offset = 0, limit = 20 }: { user_id: number, type: number } & CommonInterface.FetchField = ctx.request.query;
+      /**
+       * @todo [按照分页找到所有一级评论，然后找到这些一级评论的所有子评论]
+       */
+      const { count, rows } = await MessageModel.findAndCountAll({
+        where: {
+          seller_id: user_id,
+          ...!!type ? {type} : {},
+        },
+        order: [['create_time', 'DESC']],
+        include: [{
+          model: UserModel,
+          as: 'userinfo',
+        }],
+        offset: Number(offset),
+        limit: Number(limit),
+      });
+      if (count > 0 && !!rows) {
+        const data = JSON.parse(JSON.stringify(rows));
+        const promise = new Promise((resolve, reject) => {
+          
+          data.forEach(async (topMessage: any, index: number) => {
+
+            const replyUserinfo = await UserModel.findOne({where: {user_id: topMessage.user_id}, raw: true});
+            if (!!replyUserinfo) {
+              data[index].replyUserinfo = replyUserinfo;
+            }
+            if (index === data.length - 1) {
+              resolve(data);
+            }
+          });
+        });
+
+        const resolveData = await promise;
+        ctx.response.body = {
+          code: responseCode.success,
+          data: {
+            count,
+            rows: resolveData
+          },
+        };
+        return;
+      } else {
+        ctx.response.body = {
+          code: responseCode.success,
+          data: {
+            count,
+            rows,
+          },
+        };
+      }
     } catch (error) {
       ctx.response.body = {
         code: responseCode.error,
