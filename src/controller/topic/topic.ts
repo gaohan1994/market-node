@@ -45,14 +45,15 @@ class TopicController {
 
   public topicList = async (ctx: Koa.Context) => {
     try {
-      const { offset = 0, limit = 20, type } = ctx.request.query;
+      const { offset = 0, limit = 20, type, user_id } = ctx.request.query;
       const result = await TopicModel.findAndCountAll({
         offset: Number(offset),
         limit: Number(limit),
         order: [['create_time', 'DESC']],
         where: {
           status: 1,
-          ...type ? {type} : {}
+          ...type ? {type} : {},
+          ...!!user_id ? {user_id} : {}
         },
         include: [{
           model: UserModel,

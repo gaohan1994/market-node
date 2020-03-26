@@ -13,7 +13,9 @@ export declare namespace CommonInterface {
   interface FetchField {
     offset: number;
     limit?: number;
-    order?: string;
+    order: string;
+    by: string;
+    user_id?: string;
   }
 }
 
