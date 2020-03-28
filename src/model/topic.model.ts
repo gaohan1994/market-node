@@ -1,6 +1,7 @@
 import { Model, DataTypes } from 'sequelize';
 import sequelize, { UserModel, TopicModel } from './index';
 import util from '../controller/config';
+import TypeModel from './type.model';
 
 class ProductModel extends Model {
   public id!: number;
@@ -70,6 +71,12 @@ ProductModel.belongsTo(UserModel, {
   as: 'userinfo',
   foreignKey: 'user_id',
   targetKey: 'user_id',
+});
+
+ProductModel.belongsTo(TypeModel, {
+  as: 'typeinfo',
+  foreignKey: 'type',
+  targetKey: 'id',
 });
 
 export default ProductModel;

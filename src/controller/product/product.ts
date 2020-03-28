@@ -48,14 +48,15 @@ class ProductController {
   
   public productList = async (ctx: Koa.Context) => {
     try {
-      const { offset = 0, limit = 20, order, by, user_id } = ctx.request.query as CommonInterface.FetchField;
+      const { offset = 0, limit = 20, order, by, user_id, type } = ctx.request.query as CommonInterface.FetchField;
       const result = await ProductModel.findAndCountAll({
         offset: Number(offset),
         limit: Number(limit),
         order: [[order || 'create_time', by || 'DESC']],
         where: {
           status: 1,
-          ...!!user_id ? {user_id} : {}
+          ...!!user_id ? {user_id} : {},
+          ...!!type ? {type} : {},
         },
         include: [{
           model: UserModel,

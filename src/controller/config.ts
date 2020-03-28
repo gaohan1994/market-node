@@ -15,6 +15,7 @@ export declare namespace CommonInterface {
     limit?: number;
     order: string;
     by: string;
+    type?: any;
     user_id?: string;
   }
 }

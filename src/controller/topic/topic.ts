@@ -12,6 +12,7 @@ import { UserModel, TopicModel } from '../../model';
 import util, { responseCode, CommonInterface } from '../config';
 import invariant from 'invariant';
 import dayJs from 'dayjs';
+import TypeModel from '../../model/type.model';
 
 class TopicController {
 
@@ -58,6 +59,9 @@ class TopicController {
         include: [{
           model: UserModel,
           as: 'userinfo',
+        }, {
+          model: TypeModel,
+          as: 'typeinfo'
         }]
       }); 
       ctx.response.body = {

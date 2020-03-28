@@ -74,19 +74,6 @@ class UserController {
         province,
         gender,
       } = ctx.request.body;
-      
-      console.log('phone: ', phone);
-      console.log('birthday: ', birthday);
-      console.log('intro: ', intro);
-      console.log('school: ', school);
-      console.log('openId: ', openId);
-      console.log('avatarUrl: ', avatarUrl);
-      console.log('city: ', city);
-      console.log('country: ', country);
-      console.log('nickName: ', nickName);
-      console.log('language: ', language);
-      console.log('province: ', province);
-      console.log('gender: ', gender);
 
       const user = await UserModel.findOne({ where: { openId }, raw: true });
       console.log('user: ', user);
