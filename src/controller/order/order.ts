@@ -1,5 +1,6 @@
 import Koa from 'koa';
 import invariant from 'invariant';
+import { Op } from 'sequelize';
 import { responseCode } from '../config';
 import { UserModel, OrderModel, ProductModel } from '../../model';
 import dayJs from 'dayjs';
@@ -172,7 +173,12 @@ class OrderController {
       invariant(!!user, '非法用户');
 
       const result = await OrderModel.findAndCountAll({
-        where: { user_id },
+        where: {
+          [Op.or]: [
+            { user_id: Number(user_id) },
+            { seller_id: Number(user_id) }
+          ]
+        },
         offset: Number(offset),
         limit: Number(limit),
         include: [{
