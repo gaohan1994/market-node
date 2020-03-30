@@ -49,6 +49,7 @@ router.get('/product/search', ProductController.productSearch as any);
  */
 router.post('/order/create', OrderController.orderCreate as any);
 router.post('/order/cancel', OrderController.orderCancel as any);
+router.post('/order/confirm', OrderController.orderConfirm as any);
 router.get('/order/list', OrderController.orderList as any);
 router.get('/order/detail', OrderController.orderDetail as any);
 

@@ -26,7 +26,6 @@ CREATE TABLE `sys_user`  (
   `login_name` varchar(30) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '登录账号',
   `user_name` varchar(30) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT '' COMMENT '用户昵称',
   `email` varchar(50) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT '' COMMENT '用户邮箱',
-  `phone` varchar(11) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT '' COMMENT '手机号码',
   `sex` char(1) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT '0' COMMENT '用户性别（0男 1女 2未知）',
   `avatar` varchar(100) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT '' COMMENT '头像路径',
   `password` varchar(50) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT '' COMMENT '密码',
@@ -87,6 +86,7 @@ CREATE TABLE `market_order`  (
   `product_picture` varchar(200) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '商品图片',
   `package_id` varchar(20) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '严选平台包裹号',
   `amount` bigint(12) UNSIGNED NULL DEFAULT NULL COMMENT '小计',
+  `user_phone` varchar(11) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT '' COMMENT '买家手机号',
   `random_key` char(6) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '随机串',
   `user_id` int(11) UNSIGNED NULL DEFAULT NULL COMMENT '用户ID',
   `pay_amount` bigint(12) UNSIGNED NULL DEFAULT NULL COMMENT '订单金额',
@@ -115,6 +115,7 @@ DROP TABLE IF EXISTS `market_order_item`;
 CREATE TABLE `market_order_item`  (
   `id` int(11) UNSIGNED NOT NULL AUTO_INCREMENT COMMENT '订单详情ID',
   `order_no` varchar(20) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '订单号',
+  `phone` varchar(11) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT '' COMMENT '卖家手机号码',
   `user_id` int(11) UNSIGNED NULL DEFAULT NULL COMMENT '用户ID',
   `product_id` int(11) UNSIGNED NULL DEFAULT NULL COMMENT '商品ID',
   `product_name` varchar(200) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '商品名称',
@@ -164,6 +165,7 @@ DROP TABLE IF EXISTS `market_item`;
 CREATE TABLE `market_item`  (
   `id` int(11) UNSIGNED NOT NULL AUTO_INCREMENT COMMENT '自增主键',
   `user_id` int(11) NOT NULL COMMENT '卖家编号',
+  `phone` varchar(11) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT '' COMMENT '卖家手机号码',
   `viewing_count` int(11) NOT NULL DEFAULT 0 COMMENT '浏览数',
   `title` varchar(200) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '标题',
   `description` text CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL COMMENT '商品描述',

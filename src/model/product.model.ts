@@ -8,6 +8,7 @@ class ProductModel extends Model {
   public viewing_count!: number;
   public trans_type!: number;
   public type!: number;
+  public phone!: string;
   public is_free_shipping!: number;
   public amount!: number;
   public exp_fee!: number;
@@ -37,7 +38,8 @@ ProductModel.init({
   title: { type: DataTypes.STRING },
   create_time: { type: DataTypes.STRING },
   update_time: { type: DataTypes.STRING },
-  pics: { type: DataTypes.STRING }
+  pics: { type: DataTypes.STRING },
+  phone: { type: DataTypes.STRING },
 }, {
   sequelize,
   freezeTableName: true,

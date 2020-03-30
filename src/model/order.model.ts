@@ -1,6 +1,6 @@
 
 import { Model, DataTypes } from 'sequelize';
-import sequelize, { UserModel } from './index';
+import sequelize, { UserModel, ProductModel } from './index';
 
 class OrderModel extends Model {
   id: number;
@@ -13,6 +13,7 @@ class OrderModel extends Model {
   product_picture: string;
   product_name: string;
   flag: number;
+  user_phone: string;
   status: number;
   pay_status: number;
   seller_id: number;
@@ -54,12 +55,19 @@ OrderModel.init({
   package_id: { type: DataTypes.INTEGER },
   amount: { type: DataTypes.INTEGER },
   product_name: { type: DataTypes.STRING }, 
+  user_phone: { type: DataTypes.STRING },
   create_time: { type: DataTypes.STRING },
   update_time: { type: DataTypes.STRING },
 }, {
   sequelize,
   freezeTableName: true,
   modelName: 'market_order'
+});
+
+OrderModel.belongsTo(ProductModel, {
+  as: 'productinfo',
+  foreignKey: 'product_id',
+  targetKey: 'id',
 });
 
 OrderModel.belongsTo(UserModel, {

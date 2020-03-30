@@ -61,9 +61,6 @@ class ProductController {
         include: [{
           model: UserModel,
           as: 'userinfo',
-          attributes: {
-            exclude: [],
-          }
         }],
       }); 
       ctx.response.body = {
@@ -110,7 +107,6 @@ class ProductController {
     try {
       const { 
         user_id,
-        viewing_count,
         title,
         description,
         trans_type,
@@ -120,6 +116,7 @@ class ProductController {
         exp_fee,
         status,
         pics = [],
+        phone,
       } = ctx.request.body;
 
       /**
@@ -155,6 +152,7 @@ class ProductController {
         amount,
         exp_fee,
         status,
+        phone,
         pics: images,
         create_time: dayJs().format('YYYY-MM-DD HH:mm:ss'),
       };

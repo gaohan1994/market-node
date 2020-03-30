@@ -4,7 +4,6 @@ import sequelize from './index';
 class UserModel extends Model {
   public user_id!: number;
   public name!: string;
-  public phone!: string;
   public birthday!: string;
   public openId!: string;
   public avatarUrl!: string;
@@ -34,7 +33,6 @@ UserModel.init({
   language: { type: DataTypes.STRING },
   province: { type: DataTypes.STRING },
   gender: { type: DataTypes.INTEGER },
-  phone: { type: DataTypes.STRING },
   name: { type: DataTypes.STRING },
   birthday: { type: DataTypes.STRING },
   intro: { type: DataTypes.STRING },
