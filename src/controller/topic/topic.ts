@@ -13,12 +13,13 @@ import util, { responseCode, CommonInterface } from '../config';
 import invariant from 'invariant';
 import dayJs from 'dayjs';
 import TypeModel from '../../model/type.model';
+import { LikeController } from '..';
 
 class TopicController {
 
   public topicDetail = async (ctx: Koa.Context) => {
     try {
-      const { id } = ctx.request.query;
+      const { id, user_id } = ctx.request.query;
       invariant(!!id, '请传入要查询的帖子id');
 
       const topic = await TopicModel.findOne({
@@ -32,9 +33,15 @@ class TopicController {
       invariant(!!topic, '没有找到该帖子详情');
       TopicModel.update({viewing_count: topic.viewing_count + 1}, {where: {id}});
 
+      const like = await LikeController.itemLike({item_id: id, user_id, type: 1});
+      const data = {
+        ...JSON.parse(JSON.stringify(topic)),
+        like
+      };
+
       ctx.response.body = {
         code: responseCode.success,
-        data: topic
+        data: data
       };
     } catch (error) {
       ctx.response.body = {

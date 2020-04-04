@@ -26,7 +26,7 @@ LikeModel.init({
 }, {
   sequelize,
   freezeTableName: true,
-  modelName: 'market_collect',
+  modelName: 'market_like',
 });
 
 LikeModel.belongsTo(ProductModel, {

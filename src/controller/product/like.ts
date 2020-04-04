@@ -23,29 +23,36 @@ class LikeController {
   }
 
   public execItemLike = async (type: number, item_id: any, status: string) => {
+    console.log('status:', status);
+    console.log('type:', type);
+    console.log('item_id:', item_id);
+
+    let promise;
+
     if (type === 0) {
       // 商品
-      const product = ProductModel.findOne({where: {id: item_id}, raw: true});
-      await ProductModel.update({
+      const product = await ProductModel.findOne({where: {id: item_id}});
+      console.log('product: ', product)
+      promise = ProductModel.update({
         like_count: status === 'add' ? product.like_count + 1 : product.like_count - 1
       }, {
         where: {
           id: item_id
         }
       });
-      return;
+      return promise;
     }
 
     // 帖子
-    const topic = TopicModel.findOne({where: {id: item_id}, raw: true});
-    await TopicModel.update({
+    const topic = await TopicModel.findOne({where: {id: item_id}});
+    promise = TopicModel.update({
       like_count: status === 'add' ? topic.like_count + 1 : topic.like_count - 1
     }, {
       where: {
         id: item_id
       }
     });
-    return;
+    return promise;
   }
   
   public like = async (ctx: Koa.Context) => {

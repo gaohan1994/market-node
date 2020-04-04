@@ -8,7 +8,7 @@ class OrderItemModel extends Model {
   user_id: number;
   product_id: number;
   product_name: string;
-  product_picture: any[];
+  product_picture: string;
   package_id: number;
   amount: number;
   create_time: string;

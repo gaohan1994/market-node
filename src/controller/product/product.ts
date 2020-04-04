@@ -260,7 +260,7 @@ class ProductController {
       ProductModel.update({viewing_count: product.viewing_count + 1}, {where: {id}});
       const like = await LikeController.itemLike({item_id: id, user_id, type: 0});
       const data = {
-        ...product,
+        ...JSON.parse(JSON.stringify(product)),
         like
       };
 
