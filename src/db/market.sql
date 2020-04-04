@@ -128,6 +128,23 @@ CREATE TABLE `market_order_item`  (
   INDEX `idx_order_no`(`order_no`) USING BTREE
 ) ENGINE = InnoDB AUTO_INCREMENT = 4227 CHARACTER SET = utf8 COLLATE = utf8_general_ci COMMENT = '订单条目表' ROW_FORMAT = Dynamic;
 
+
+-- ----------------------------
+-- Table structure for market_collect
+-- ----------------------------
+DROP TABLE IF EXISTS `market_like`;
+CREATE TABLE `market_like`  (
+  `id` int(11) UNSIGNED NOT NULL AUTO_INCREMENT COMMENT '自增主键',
+  `user_id` int(11) NOT NULL COMMENT '用户编号',
+  `item_id` int(11) NOT NULL COMMENT '商品编号',
+  `status` tinyint(1) NOT NULL DEFAULT 1 COMMENT '状态（0：无效，1：有效）',
+  `type` tinyint(1) NOT NULL DEFAULT 1 COMMENT '收藏类别（0：商品，1：帖子）',
+  `create_time` datetime(0) NULL DEFAULT CURRENT_TIMESTAMP(0) COMMENT '创建时间',
+  `update_time` datetime(0) NULL DEFAULT NULL ON UPDATE CURRENT_TIMESTAMP(0) COMMENT '修改时间',
+  PRIMARY KEY (`id`) USING BTREE
+) ENGINE = InnoDB AUTO_INCREMENT = 1 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci COMMENT = '用户点赞表' ROW_FORMAT = Dynamic;
+
+
 -- ----------------------------
 -- Table structure for market_collect
 -- ----------------------------
@@ -167,6 +184,7 @@ CREATE TABLE `market_item`  (
   `user_id` int(11) NOT NULL COMMENT '卖家编号',
   `phone` varchar(11) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT '' COMMENT '卖家手机号码',
   `viewing_count` int(11) NOT NULL DEFAULT 0 COMMENT '浏览数',
+  `like_count` int(11) NOT NULL DEFAULT 0 COMMENT '喜欢数',
   `title` varchar(200) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '标题',
   `description` text CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL COMMENT '商品描述',
   `trans_type` tinyint(1) NOT NULL DEFAULT 0 COMMENT '交易方式（0：线下，1：邮寄）',
@@ -190,7 +208,7 @@ CREATE TABLE `market_topic`  (
   `id` int(11) UNSIGNED NOT NULL AUTO_INCREMENT COMMENT '自增主键',
   `user_id` int(11) NOT NULL COMMENT '作者id',
   `viewing_count` int(11) NOT NULL DEFAULT 0 COMMENT '浏览数',
-  `like_count` int(11) NOT NULL DEFAULT 0 COMMENT '点赞数',
+  `like_count` int(11) NOT NULL DEFAULT 0 COMMENT '喜欢数',
   `collect_count` int(11) NOT NULL DEFAULT 0 COMMENT '收藏数',
   `title` varchar(200) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '帖子标题',
   `description` text CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL COMMENT '帖子描述',

@@ -6,6 +6,7 @@ class ProductModel extends Model {
   public id!: number;
   public user_id!: number;
   public viewing_count!: number;
+  public like_count!: number;
   public trans_type!: number;
   public type!: number;
   public phone!: string;
@@ -27,6 +28,7 @@ ProductModel.init({
     autoIncrement: true
   },
   user_id: { type: DataTypes.INTEGER },
+  like_count: { type: DataTypes.INTEGER },
   viewing_count: { type: DataTypes.INTEGER },
   trans_type: { type: DataTypes.INTEGER },
   type: { type: DataTypes.INTEGER },

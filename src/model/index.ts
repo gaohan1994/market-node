@@ -1,8 +1,19 @@
 
 import { Sequelize } from 'sequelize';
 
-const config = {
+const env = process.env.NODE_ENV;
+
+const config = env === 'development' ? {
   database: 'market', // 使用哪个数据库
+  username: 'root', // 用户名
+  password: 'root', // 口令
+  host: 'localhost', // 主机名
+  port: 3306 // 端口号，MySQL默认3306
+} : {
+  /**
+   * @todo 生产环境
+   */
+  database: 'market_prod', // 使用哪个数据库
   username: 'root', // 用户名
   password: 'root', // 口令
   host: 'localhost', // 主机名
@@ -30,3 +41,4 @@ export { default as CollectModel } from './colllect.model';
 export { default as OrderModel } from './order.model';
 export { default as OrderItemModel } from './order.item.model';
 export { default as TopicModel } from './topic.model';
+export { default as LikeModel } from './like.model';

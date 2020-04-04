@@ -11,6 +11,7 @@ import {
   QiniuController,
   TopicController,
   WeixinHelper,
+  LikeController
 } from "../controller";
 import multer from 'koa-multer';
 
@@ -105,6 +106,11 @@ router.post('/message/delete', MessageController.messageDelete as any);
 router.post('/upload/image', upload.single('image'), FileController.uploadImage as any);
 router.post('/upload/qiniu/image', upload.single('image'), QiniuController.qiniuUploadFile as any);
 router.post('/upload/images', upload.array('images', 12), FileController.uploadImages as any);
+
+/**
+ * @todo [点赞模块]
+ */
+router.post('/like', LikeController.like as any);
 
 /**
  * @todo [微信相关]

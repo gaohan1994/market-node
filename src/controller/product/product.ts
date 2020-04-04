@@ -1,7 +1,8 @@
 import Koa from 'koa';
 import { Op } from 'sequelize';
-import { ProductModel, UserModel, TypeModel } from '../../model';
+import { ProductModel, UserModel, TypeModel, LikeModel } from '../../model';
 import util, { responseCode, CommonInterface } from '../config';
+import LikeController from './like';
 import invariant from 'invariant';
 import dayJs from 'dayjs';
 
@@ -143,7 +144,8 @@ class ProductController {
 
       const newProduct = {
         user_id: user.user_id,
-        viewing_count: Math.ceil(Math.random() * 1000),
+        viewing_count: Math.ceil(Math.random() * 10),
+        like_count: Math.ceil(Math.random() * 10),
         title,
         description,
         trans_type,
@@ -237,8 +239,9 @@ class ProductController {
    */
   public productDetail = async (ctx: Koa.Context) => {
     try {
-      const { id } = ctx.request.query;
+      const { id, user_id } = ctx.request.query;
       invariant(!!id, '请传入要查询的商品id');
+      invariant(!!user_id, '请先登录！');
 
       const product = await ProductModel.findOne({
         where: {id}, 
@@ -253,11 +256,17 @@ class ProductController {
         raw: false
       });
       invariant(!!product, '没有找到该商品详情');
+
       ProductModel.update({viewing_count: product.viewing_count + 1}, {where: {id}});
+      const like = await LikeController.itemLike({item_id: id, user_id, type: 0});
+      const data = {
+        ...product,
+        like
+      };
 
       ctx.response.body = {
         code: responseCode.success,
-        data: product
+        data: data
       };
     } catch (error) {
       ctx.response.body = {
