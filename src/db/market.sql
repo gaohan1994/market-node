@@ -222,6 +222,23 @@ CREATE TABLE `market_topic`  (
 ) ENGINE = InnoDB AUTO_INCREMENT = 1 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci COMMENT = '二手市场论坛表' ROW_FORMAT = Dynamic;
 
 -- ----------------------------
+-- Table structure for market_item
+-- ----------------------------
+DROP TABLE IF EXISTS `market_donate`;
+CREATE TABLE `market_donate`  (
+  `id` int(11) UNSIGNED NOT NULL AUTO_INCREMENT COMMENT '自增主键',
+  `user_id` int(11) NOT NULL COMMENT '用户id',
+  `title` varchar(200) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '捐献物品标题',
+  `description` text CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL COMMENT '捐献物品描述',
+  `content` text CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL COMMENT '捐献物品详情',
+  `status` tinyint(1) NOT NULL DEFAULT 1 COMMENT '状态（0：已删除，1：有效，2：已下架）',
+  `pics` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '图片文件夹地址',
+  `create_time` datetime(0) NULL DEFAULT CURRENT_TIMESTAMP(0) COMMENT '创建时间',
+  `update_time` datetime(0) NULL DEFAULT NULL COMMENT '修改时间',
+  PRIMARY KEY (`id`) USING BTREE
+) ENGINE = InnoDB AUTO_INCREMENT = 1 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci COMMENT = '用户捐献表' ROW_FORMAT = Dynamic;
+
+-- ----------------------------
 -- Table structure for cceos_flea_market_message
 -- ----------------------------
 DROP TABLE IF EXISTS `market_message`;
