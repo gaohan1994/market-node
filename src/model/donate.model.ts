@@ -12,6 +12,7 @@ class DonateModel extends Model {
   public update_time!: string;
   public pics!: string;
   public content!: string;
+  public phone!: string;
 }
 
 DonateModel.init(
@@ -28,7 +29,8 @@ DonateModel.init(
     title: { type: DataTypes.STRING },
     create_time: { type: DataTypes.STRING },
     update_time: { type: DataTypes.STRING },
-    pics: { type: DataTypes.STRING }
+    pics: { type: DataTypes.STRING },
+    phone: { type: DataTypes.STRING }
   },
   {
     sequelize,

@@ -228,6 +228,7 @@ DROP TABLE IF EXISTS `market_donate`;
 CREATE TABLE `market_donate`  (
   `id` int(11) UNSIGNED NOT NULL AUTO_INCREMENT COMMENT '自增主键',
   `user_id` int(11) NOT NULL COMMENT '用户id',
+  `phone` varchar(11) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT '' COMMENT '卖家手机号码',
   `title` varchar(200) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '捐献物品标题',
   `description` text CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL COMMENT '捐献物品描述',
   `content` text CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL COMMENT '捐献物品详情',
