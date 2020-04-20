@@ -1,6 +1,5 @@
-
-import { Model, DataTypes } from 'sequelize';
-import sequelize, { UserModel } from './index';
+import { Model, DataTypes } from "sequelize";
+import sequelize, { UserModel, LikeModel } from "./index";
 
 class MessageModel extends Model {
   id: number;
@@ -8,6 +7,7 @@ class MessageModel extends Model {
   item_id: number;
   parent_id: number;
   reply_id: number;
+  like_count: number;
   user_id: number;
   content: string;
   thumbs: number;
@@ -17,33 +17,37 @@ class MessageModel extends Model {
   update_time: string;
 }
 
-MessageModel.init({
-  id: {
-    type: DataTypes.INTEGER.UNSIGNED,
-    primaryKey: true,
-    autoIncrement: true
+MessageModel.init(
+  {
+    id: {
+      type: DataTypes.INTEGER.UNSIGNED,
+      primaryKey: true,
+      autoIncrement: true
+    },
+    type: { type: DataTypes.INTEGER },
+    seller_id: { type: DataTypes.INTEGER },
+    item_id: { type: DataTypes.INTEGER },
+    parent_id: { type: DataTypes.INTEGER },
+    like_count: { type: DataTypes.INTEGER },
+    reply_id: { type: DataTypes.INTEGER },
+    user_id: { type: DataTypes.INTEGER },
+    thumbs: { type: DataTypes.INTEGER },
+    bit_log: { type: DataTypes.INTEGER },
+    content: { type: DataTypes.STRING },
+    create_time: { type: DataTypes.STRING },
+    update_time: { type: DataTypes.STRING }
   },
-  type: { type: DataTypes.INTEGER },
-  seller_id: { type: DataTypes.INTEGER },
-  item_id: { type: DataTypes.INTEGER },
-  parent_id: { type: DataTypes.INTEGER },
-  reply_id: { type: DataTypes.INTEGER },
-  user_id: { type: DataTypes.INTEGER },
-  thumbs: { type: DataTypes.INTEGER },
-  bit_log: { type: DataTypes.INTEGER },
-  content: { type: DataTypes.STRING },
-  create_time: { type: DataTypes.STRING },
-  update_time: { type: DataTypes.STRING },
-}, {
-  sequelize,
-  freezeTableName: true,
-  modelName: 'market_message'
-});
+  {
+    sequelize,
+    freezeTableName: true,
+    modelName: "market_message"
+  }
+);
 
 MessageModel.belongsTo(UserModel, {
-  as: 'userinfo',
-  foreignKey: 'user_id',
-  targetKey: 'user_id',
+  as: "userinfo",
+  foreignKey: "user_id",
+  targetKey: "user_id"
 });
 
 export default MessageModel;
