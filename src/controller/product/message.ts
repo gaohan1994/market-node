@@ -2,7 +2,7 @@
  * @Author: Ghan
  * @Date: 2020-01-25 21:51:50
  * @Last Modified by: Ghan
- * @Last Modified time: 2020-04-20 14:00:18
+ * @Last Modified time: 2020-04-20 17:15:03
  */
 import Koa from "koa";
 import {
@@ -16,7 +16,7 @@ import { responseCode, CommonInterface } from "../config";
 import invariant from "invariant";
 import dayJs from "dayjs";
 import { Op, Sequelize } from "sequelize";
-// import { merge } from 'lodash';
+import { merge } from "lodash";
 
 /**
  * @todo [留言/评论模块]
@@ -215,6 +215,9 @@ class MessageController {
     });
     const secondMessageJson = JSON.parse(JSON.stringify(messageItems));
     const promise = new Promise(resolve => {
+      if (secondMessageJson.length === 0) {
+        resolve(secondMessageJson);
+      }
       secondMessageJson.forEach(async (secondMessage, index) => {
         const like = await LikeModel.findOne({
           where: {
@@ -238,7 +241,8 @@ class MessageController {
         user_id,
         type = 0,
         offset = 0,
-        limit = 20
+        limit = 20,
+        order = "create_time"
       }: {
         item_id: number;
         type: number;
@@ -253,7 +257,7 @@ class MessageController {
           parent_id: 0,
           type
         },
-        order: [["create_time", "DESC"]],
+        order: [[order, "DESC"]],
         include: [
           {
             model: UserModel,
@@ -266,11 +270,13 @@ class MessageController {
 
       if (count > 0 && !!rows) {
         const data = JSON.parse(JSON.stringify(rows));
-        const promise = new Promise(resolve => {
-          data.forEach(async (topMessage: any, index: number) => {
-            /**
-             * @todo [顶层评论是否点赞]
-             */
+
+        const promises = [];
+        data.forEach(async (topMessage: any, index: number) => {
+          /**
+           * @todo [顶层评论是否点赞]
+           */
+          const promise = new Promise(async resolve => {
             const topLike = await LikeModel.findOne({
               where: { item_id: topMessage.id, user_id: user_id },
               raw: true
@@ -283,24 +289,39 @@ class MessageController {
               user_id,
               type
             });
-            if (!!secondMessageItems) {
-              data[index].subMessage = secondMessageItems;
-            }
-            if (index === data.length - 1) {
-              resolve(data);
-            }
+            data[index] = merge(
+              {},
+              {
+                ...data[index],
+                subMessage: secondMessageItems
+              }
+            );
+            const currentItem = {
+              ...data[index],
+              like: topLike,
+              subMessage: secondMessageItems
+            };
+            resolve(currentItem);
           });
+          promises.push(promise);
         });
 
-        const resolveData = await promise;
-        ctx.response.body = {
-          code: responseCode.success,
-          data: {
-            count,
-            rows: resolveData
-          }
-        };
-        return;
+        return Promise.all(promises)
+          .then(resolveData => {
+            ctx.response.body = {
+              code: responseCode.success,
+              data: {
+                count,
+                rows: resolveData
+              }
+            };
+          })
+          .catch(error => {
+            ctx.response.body = {
+              code: responseCode.error,
+              msg: error.message
+            };
+          });
       } else {
         ctx.response.body = {
           code: responseCode.success,
