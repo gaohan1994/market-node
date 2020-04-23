@@ -69,7 +69,8 @@ class UserController {
         nickName,
         language,
         province,
-        gender
+        gender,
+        studentId
       } = ctx.request.body;
 
       const user = await UserModel.findOne({ where: { openId }, raw: true });
@@ -96,6 +97,7 @@ class UserController {
         language,
         province,
         gender,
+        studentId,
         create_time: dayJs().format("YYYY-MM-DD HH:mm:ss")
       };
       console.log("newUser: ", newUser);
