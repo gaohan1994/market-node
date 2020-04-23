@@ -8,22 +8,87 @@
 
 import Koa from "koa";
 import { UserModel, DonateModel } from "../../model";
-import util, { responseCode, CommonInterface } from "../config";
+import util, { responseCode } from "../config";
 import invariant from "invariant";
 import dayJs from "dayjs";
 
 class DonateController {
+  public donateReceive = async (ctx: Koa.Context) => {
+    try {
+      const { id } = ctx.request.body;
+      invariant(!!id, "请传入要接收的id");
+
+      const donate = await DonateModel.findOne({
+        where: { id },
+        raw: false
+      });
+      invariant(!!donate, "没有找到详情");
+      console.log("====================================");
+      console.log("donate", donate);
+      console.log("====================================");
+      /**
+       * @todo 找到之后接收
+       */
+      await DonateModel.update({ status: 2 }, { where: { id } });
+
+      ctx.response.body = {
+        code: responseCode.success,
+        data: "接收成功"
+      };
+    } catch (error) {
+      ctx.response.body = {
+        code: responseCode.error,
+        msg: error.message
+      };
+    }
+  };
+
+  public donateDetail = async (ctx: Koa.Context) => {
+    try {
+      const { id } = ctx.request.query;
+      invariant(!!id, "请传入要查询的id");
+
+      const donate = await DonateModel.findOne({
+        where: { id },
+        include: [
+          {
+            model: UserModel,
+            as: "userinfo"
+          }
+        ],
+        raw: false
+      });
+      invariant(!!donate, "没有找到详情");
+
+      ctx.response.body = {
+        code: responseCode.success,
+        data: donate
+      };
+    } catch (error) {
+      ctx.response.body = {
+        code: responseCode.error,
+        msg: error.message
+      };
+    }
+  };
+
   public donateList = async (ctx: Koa.Context) => {
     try {
-      const { offset = 0, limit = 20, user_id } = ctx.request
-        .query as CommonInterface.FetchField;
+      const { offset = 0, limit = 20, user_id, status = 1 } = ctx.request.query;
       const result = await DonateModel.findAndCountAll({
-        offset: Number(offset),
-        limit: Number(limit),
+        // offset: Number(offset),
+        // limit: Number(limit),
         order: [["create_time", "DESC"]],
         where: {
+          status,
           ...(!!user_id ? { user_id } : {})
-        }
+        },
+        include: [
+          {
+            model: UserModel,
+            as: "userinfo"
+          }
+        ]
       });
       ctx.response.body = {
         code: responseCode.success,

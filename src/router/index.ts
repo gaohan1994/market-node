@@ -135,5 +135,7 @@ router.post("/weixin/decrypt", WeixinHelper.decryptData as any);
  */
 router.post("/donate/add", DonateController.donateAdd as any);
 router.get("/donate/list", DonateController.donateList as any);
+router.get("/donate/detail", DonateController.donateDetail as any);
+router.post("/donate/receive", DonateController.donateReceive as any);
 
 export default router;

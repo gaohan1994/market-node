@@ -232,7 +232,7 @@ CREATE TABLE `market_donate`  (
   `title` varchar(200) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '捐献物品标题',
   `description` text CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL COMMENT '捐献物品描述',
   `content` text CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL COMMENT '捐献物品详情',
-  `status` tinyint(1) NOT NULL DEFAULT 1 COMMENT '状态（0：已删除，1：有效，2：已下架）',
+  `status` tinyint(1) NOT NULL DEFAULT 1 COMMENT '状态（0：已删除，1：有效，2：已回收）',
   `pics` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '图片文件夹地址',
   `create_time` datetime(0) NULL DEFAULT CURRENT_TIMESTAMP(0) COMMENT '创建时间',
   `update_time` datetime(0) NULL DEFAULT NULL COMMENT '修改时间',
